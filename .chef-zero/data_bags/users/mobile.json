@@ -1,0 +1,8 @@
+{
+  "id": "mobile",
+  "groups": [ "evertrue" ],
+  "uid": 1002,
+  "shell": "\/bin\/bash",
+  "comment": "Mobile worker, set up by Chef",
+  "action": "remove"
+}

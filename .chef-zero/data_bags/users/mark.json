@@ -1,0 +1,11 @@
+{
+  "id": "mark",
+  "ssh_keys": "ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABAQDceqvfAjsJvvabGrxHIpimlZCUd9wksbjBN5p2frQQbGcfAXsebEbTQQGrmWL6FLYFcDi9fsUfXzVfnHqRIeMQMEob53b8dnPVFgEWvXimNYkd8SydgFi56nefOJQRnm+PxKV0aacpmgEIGOC/Y2/CSY7ig4kqFZJMRLLo/pSJUZEI7cEDBL8A8UC+24jNlQWFXhrpki4zhy3B4YSqS6f/KYcvN78l8eDAA5WK4Yb2EMsrek4E8DzhWt3JOXGTwPQHrNdVXan8F9bQ0+Rd/6YTDPVEaOdNG79rEgne4I3lLCAEdij1YsA2J+k0D/Wd84yJJkRUNZODWhxqQQ4aqVv7 mark@evertrue.com",
+  "groups": [
+    "sysadmin",
+    "evertrue"
+  ],
+  "uid": 5003,
+  "shell": "\/bin\/bash",
+  "comment": "Mark Greene, set up by Chef"
+}

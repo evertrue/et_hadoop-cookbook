@@ -1,0 +1,8 @@
+{
+  "id": "labs",
+  "groups": [ "evertrue" ],
+  "uid": 1005,
+  "shell": "\/bin\/bash",
+  "comment": "labs worker, set up by Chef",
+  "action": "remove"
+}

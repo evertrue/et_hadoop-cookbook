@@ -1,0 +1,11 @@
+{
+  "id": "bob",
+  "ssh_keys": "ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABAQC9TQSIMf8qUuJurGNAVSpsxRRFf9w5QwHm7npoYNhoglPdfPV0aaNKTzWeLdVS2vuo9qcBHdFqz6YWJeRTkQvJ4SAOXlLA0HtqymvK+OokfXkcZCer4l/RWQJsYRjjNQGLO6SVbsfG5vI4KbuYO16l0ez49A+X0ywUXQX6klJEJBvmku97srMRU0nSIpQLtoNlq4QRgPky7hly8G7PNfv3lVrtJPXb37qcEpnLZihXvgIXjA7J7ZQ9wtWp/mZ5th4LzltxIsgFv08XyWlFCMZUk0q9kYUNmfFCitG8w5d99272yyMHPeeDLD0rj8eBTXdR6fnmRys4malp33IV8Cl1 bob@Bobs-MacBook-Pro.local",
+  "groups": [
+    "sysadmin",
+    "evertrue"
+  ],
+  "uid": 6007,
+  "shell": "\/bin\/bash",
+  "comment": "Bob Breznak, set up by Chef"
+}

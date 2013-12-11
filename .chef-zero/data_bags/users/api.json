@@ -1,0 +1,10 @@
+{
+  "id": "api",
+  "groups": [
+    "evertrue"
+  ],
+  "uid": 1001,
+  "shell": "\/bin\/bash",
+  "comment": "API worker, set up by Chef",
+  "action": "remove"
+}

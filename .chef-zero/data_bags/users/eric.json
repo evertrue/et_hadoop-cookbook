@@ -1,0 +1,11 @@
+{
+  "id": "eric",
+  "ssh_keys": "ssh-rsa AAAAB3NzaC1yc2EAAAABIwAAAQEA3D+k9Gv5w2vHbBz9DlRcRUXVT+Xh8INfErbvnRpFXBdlkjYfzPHXHqBCbzsWWQjqGNRxo54//fnjXtwI8ysjS2xQwTfhdYb+bQCS5fIunmq3OZn41AJ3P81E0hv+OBGj/3J39GlYygNZzncJTitvmeoT34u1JBK1sl5uayJvmwCXifhZWtuz1dI4yqseUJi2ckp+lwYRzUE51mryom2Eat4aXyIw255+aLUrzJn1plDcKqnsRDC+n5gzAZR9yUaCjORxN9hpkdmXT9GpwowoHWERaWMrG43H4sXUQrh+VwEMjvaPfHCBLzdK1/5qodw7h/dBNBqWONGbyhYOYnMuPQ== eric@evertrue.com",
+  "groups": [
+    "sysadmin",
+    "evertrue"
+  ],
+  "uid": 5002,
+  "shell": "\/bin\/bash",
+  "comment": "Eric Carlstrom, set up by Chef"
+}

@@ -1,0 +1,8 @@
+{
+  "id": "verify",
+  "groups": [ "evertrue" ],
+  "uid": 1012,
+  "shell": "\/bin\/bash",
+  "comment": "Verify worker, set up by Chef",
+  "action": "remove"
+}

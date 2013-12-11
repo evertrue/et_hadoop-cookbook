@@ -1,0 +1,8 @@
+{
+  "id": "web",
+  "groups": [ "evertrue" ],
+  "uid": 1006,
+  "shell": "\/bin\/bash",
+  "comment": "web worker, set up by Chef",
+  "action": "remove"
+}

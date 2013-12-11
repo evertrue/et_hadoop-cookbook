@@ -1,0 +1,3344 @@
+{
+  "name": "stage-logs-1a",
+  "chef_environment": "stage",
+  "run_list": [
+    "recipe[et_base]",
+    "recipe[logserver]"
+  ],
+  "normal": {
+    "tags": [
+
+    ],
+    "copperegg": {
+      "apikey": "Dbnfumv2xwWkg6Xp",
+      "alltags": "stage,"
+    },
+    "authorization": {
+      "sudo": {
+        "users": [
+          "ec2-user",
+          "vagrant"
+        ],
+        "passwordless": true
+      }
+    },
+    "elasticsearch": {
+      "discovery": {
+        "zen": {
+          "ping": {
+            "multicast": {
+              "enabled": false
+            }
+          }
+        }
+      },
+      "discovery.zen.ping.unicast.hosts": "127.0.0.1[9300-9400]",
+      "cluster": {
+        "name": "logstash"
+      }
+    },
+    "repo": {
+      "dell": {
+        "enabled": false
+      },
+      "epel": {
+        "key": "RPM-GPG-KEY-EPEL-6"
+      },
+      "vmware": {
+        "enabled": false
+      }
+    },
+    "kibana": {
+      "webserver_listen": "0.0.0.0",
+      "es_server": "127.0.0.1"
+    },
+    "logstash": {
+      "server": {
+        "source_url": "http://ops.evertrue.com.s3.amazonaws.com/pkgs/logstash-1.1.13-flatjar.jar",
+        "install_rabbitmq": false,
+        "enable_embedded_es": false,
+        "debug": true,
+        "inputs": [
+          {
+            "redis": {
+              "type": "redis-input",
+              "host": "127.0.0.1",
+              "data_type": "list",
+              "key": "logstash",
+              "format": "json_event"
+            }
+          }
+        ],
+        "filters": [
+          {
+            "grok": {
+              "type": "rsyslog23",
+              "pattern": [
+                "%{SYSLOG23LINE}"
+              ],
+              "add_field": [
+                "received_from",
+                "%{@source_host}"
+              ]
+            }
+          },
+          {
+            "syslog_pri": {
+              "type": "rsyslog23",
+              "syslog_pri_field_name": "syslog5424_pri"
+            }
+          },
+          {
+            "date": {
+              "type": "rsyslog23",
+              "match": [
+                "ISO8601"
+              ]
+            }
+          }
+        ]
+      },
+      "agent": {
+        "debug": false,
+        "inputs": [
+          {
+            "file": {
+              "type": "rsyslog23",
+              "path": "/var/log/rsyslog/**/*log",
+              "start_position": "beginning"
+            }
+          }
+        ],
+        "outputs": [
+          {
+            "redis": {
+              "host": [
+                "127.0.0.1"
+              ],
+              "data_type": "list",
+              "key": "logstash",
+              "batch": "true"
+            }
+          }
+        ]
+      },
+      "elasticsearch_ip": "127.0.0.1",
+      "patterns": {
+        "rsyslog23": {
+          "SYSLOG23LINE": "(?:\\<%{NONNEGINT:syslog5424_pri}\\>)%{NONNEGINT:syslog5424_ver} (%{TIMESTAMP_ISO8601:syslog5424_ts}|-) (%{HOSTNAME:syslog5424_host}|-) (%{NOTSPACE:syslog5424_app}|-)( |-)?%{WORD:syslog5424_proc}? (%{WORD:syslog5424_msgid}|-) (?:\\[%{DATA:syslog5424_sd}\\]+|-) %{GREEDYDATA:syslog5424_msg}"
+        }
+      }
+    },
+    "redis": {
+      "install_type": "source",
+      "config": {
+        "loglevel": "debug",
+        "logfile": "/var/log/redis.log"
+      }
+    },
+    "rsyslog": {
+      "log_dir": "/var/log/rsyslog",
+      "high_precision_timestamps": true,
+      "server": true
+    },
+    "chef_client": {
+      "bin": "/usr/bin/chef-client"
+    },
+    "newrelic": {
+      "server_monitoring": {
+        "license": "6757eb84682982ea6b4041026232883d1e610fe3"
+      }
+    },
+    "nginx": {
+      "default_site_enabled": false
+    }
+  },
+  "default": {
+    "apt": {
+      "cacher-client": {
+        "restrict_environment": false
+      },
+      "cacher_port": 3142,
+      "key_proxy": "",
+      "caching_server": false
+    },
+    "build_essential": {
+      "compiletime": false
+    },
+    "chef_client": {
+      "interval": "1800",
+      "splay": "300",
+      "log_dir": "/var/log/chef",
+      "log_file": null,
+      "log_level": "info",
+      "verbose_logging": true,
+      "conf_dir": "/etc/chef",
+      "bin": "/usr/bin/chef-client",
+      "server_url": "http://localhost:4000",
+      "validation_client_name": "chef-validator",
+      "cron": {
+        "minute": "0",
+        "hour": "*/4",
+        "path": null,
+        "environment_variables": null,
+        "log_file": "/dev/null",
+        "use_cron_d": false
+      },
+      "environment": null,
+      "load_gems": {
+      },
+      "report_handlers": [
+
+      ],
+      "exception_handlers": [
+
+      ],
+      "checksum_cache_skip_expires": true,
+      "daemon_options": [
+
+      ],
+      "init_style": "init",
+      "run_path": "/var/run/chef",
+      "cache_path": "/var/cache/chef",
+      "backup_path": "/var/lib/chef",
+      "checksum_cache_path": "/var/cache/chef/checksums"
+    },
+    "ohai": {
+      "disabled_plugins": [
+
+      ],
+      "plugin_path": "/etc/chef/ohai_plugins",
+      "plugins": {
+        "ohai": "plugins"
+      }
+    },
+    "chef_handler": {
+      "root_user": "root",
+      "root_group": "root",
+      "handler_path": "/var/chef/handlers"
+    },
+    "copperegg": {
+      "apikey": "YOUR_USER_APIKEY",
+      "tags": "",
+      "label": "",
+      "proxy": "",
+      "oom_protect": false,
+      "use_fqdn": false,
+      "include_chef_tags": true,
+      "include_roles_astags": true,
+      "include_env_astag": true,
+      "annotate_chefrun_success": false,
+      "annotate_chefrun_fail": true,
+      "remove_on_uninstall": false,
+      "create_sshprobe": false,
+      "must_restart": true,
+      "template_updated": false
+    },
+    "newrelic": {
+      "server_monitoring": {
+        "license": "CHANGE_ME",
+        "logfile": null,
+        "loglevel": null,
+        "proxy": null,
+        "ssl": null,
+        "ssl_ca_bundle": null,
+        "ssl_ca_path": null,
+        "pidfile": null,
+        "collector_host": null,
+        "timeout": null,
+        "windows_version": "2.0.0.198",
+        "windows64_checksum": "5a8f3f5e8f15997463430401756d377c321c8899c2790ca85e5587a5b643651e",
+        "windows32_checksum": "ac2b65eecaad461fdd2e4386e3e4c9f96ea940b35bdf7a8c532c21dbd1c99ff0"
+      },
+      "application_monitoring": {
+        "license": "CHANGE_ME",
+        "enabled": null,
+        "logfile": null,
+        "loglevel": null,
+        "appname": null,
+        "daemon": {
+          "logfile": "/var/log/newrelic/newrelic-daemon.log",
+          "loglevel": null,
+          "port": null,
+          "max_threads": null,
+          "ssl": null,
+          "ssl_ca_path": null,
+          "ssl_ca_bundle": null,
+          "proxy": null,
+          "pidfile": null,
+          "location": null,
+          "collector_host": null,
+          "dont_launch": null
+        },
+        "capture_params": null,
+        "ignored_params": null,
+        "error_collector": {
+          "enable": null,
+          "record_database_errors": null,
+          "prioritize_api_errors": null
+        },
+        "browser_monitoring": {
+          "auto_instrument": null
+        },
+        "transaction_tracer": {
+          "enable": null,
+          "threshold": null,
+          "detail": null,
+          "slow_sql": null,
+          "stack_trace_threshold": null,
+          "explain_threshold": null,
+          "record_sql": null,
+          "custom": null
+        },
+        "framework": null,
+        "webtransaction": {
+          "name": {
+            "remove_trailing_path": null,
+            "functions": null,
+            "files": null
+          }
+        }
+      },
+      "startup_mode": "agent",
+      "web_server": {
+        "service_name": "apache2"
+      },
+      "python_version": "latest",
+      "repository_key": "548C16BF"
+    },
+    "tools": {
+      "packages": [
+        "iotop",
+        "ntop",
+        "strace",
+        "mc",
+        "hping3",
+        "htop",
+        "iftop",
+        "iptraf",
+        "dnsutils",
+        "git-core",
+        "links",
+        "locate",
+        "mailutils",
+        "sysstat",
+        "zip"
+      ]
+    },
+    "dmg": {
+      "base_dir": "/Applications",
+      "cache_dir": "/var/chef/cache"
+    },
+    "yum": {
+      "exclude": [
+
+      ],
+      "installonlypkgs": [
+
+      ],
+      "ius_release": "1.0-11",
+      "repoforge_release": "0.5.2-2",
+      "proxy": "",
+      "proxy_username": "",
+      "proxy_password": "",
+      "cachedir": "/var/cache/yum",
+      "keepcache": 0,
+      "elrepo": {
+        "url": "http://elrepo.org/mirrors-elrepo.el12",
+        "key": "RPM-GPG-KEY-elrepo.org",
+        "key_url": "http://elrepo.org/RPM-GPG-KEY-elrepo.org",
+        "includepkgs": null,
+        "exclude": null
+      },
+      "epel": {
+        "url": "http://mirrors.fedoraproject.org/mirrorlist?repo=epel-12&arch=$basearch",
+        "baseurl": "",
+        "key": "RPM-GPG-KEY-EPEL-6",
+        "key_url": "http://download.fedoraproject.org/pub/epel/RPM-GPG-KEY-EPEL-6",
+        "includepkgs": null,
+        "exclude": null
+      },
+      "remi": {
+        "url": "http://rpms.famillecollet.com/enterprise/12/remi/mirror",
+        "key": "RPM-GPG-KEY-remi",
+        "key_url": "http://rpms.famillecollet.com/RPM-GPG-KEY-remi",
+        "includepkgs": null,
+        "exclude": null
+      }
+    },
+    "runit": {
+      "sv_bin": "/usr/bin/sv",
+      "chpst_bin": "/usr/bin/chpst",
+      "service_dir": "/etc/service",
+      "sv_dir": "/etc/sv",
+      "executable": "/sbin/runit",
+      "start": "start runsvdir",
+      "stop": "stop runsvdir",
+      "reload": "reload runsvdir"
+    },
+    "windows": {
+      "allow_pending_reboots": true,
+      "rubyzipversion": null
+    },
+    "git": {
+      "prefix": "/usr/local",
+      "version": "1.8.2.1",
+      "url": "https://nodeload.github.com/git/git/tar.gz/v1.8.2.1",
+      "checksum": "bdc1768f70ce3d8f3e4edcdcd99b2f85a7f8733fb684398aebe58dde3e6bcca2",
+      "server": {
+        "base_path": "/srv/git",
+        "export_all": "true"
+      }
+    },
+    "logrotate": {
+      "global": {
+        "weekly": true,
+        "rotate": 4,
+        "create": "",
+        "/var/log/wtmp": {
+          "missingok": true,
+          "monthly": true,
+          "create": "0664 root utmp",
+          "rotate": 1
+        },
+        "/var/log/btmp": {
+          "missingok": true,
+          "monthly": true,
+          "create": "0660 root utmp",
+          "rotate": 1
+        }
+      }
+    },
+    "networking": {
+      "packages": [
+        "lsof",
+        "iptables",
+        "jwhois",
+        "whois",
+        "curl",
+        "wget",
+        "rsync",
+        "jnettop",
+        "nmap",
+        "traceroute",
+        "ethtool",
+        "iproute",
+        "iputils-ping",
+        "netcat-openbsd",
+        "tcptraceroute",
+        "tcputils",
+        "tcpdump",
+        "elinks",
+        "lynx"
+      ]
+    },
+    "ntp": {
+      "servers": [
+        "0.pool.ntp.org",
+        "1.pool.ntp.org",
+        "2.pool.ntp.org",
+        "3.pool.ntp.org"
+      ],
+      "peers": [
+
+      ],
+      "restrictions": [
+
+      ],
+      "packages": [
+        "ntp",
+        "ntpdate"
+      ],
+      "service": "ntp",
+      "varlibdir": "/var/lib/ntp",
+      "driftfile": "/var/lib/ntp/ntp.drift",
+      "statsdir": "/var/log/ntpstats/",
+      "conf_owner": "root",
+      "conf_group": "root",
+      "var_owner": "ntp",
+      "var_group": "ntp",
+      "leapfile": "/etc/ntp.leapseconds",
+      "ntpdate": {
+        "disable": false
+      }
+    },
+    "authorization": {
+      "sudo": {
+        "groups": [
+
+        ],
+        "users": [
+
+        ],
+        "passwordless": false,
+        "include_sudoers_d": false,
+        "agent_forwarding": false,
+        "sudoers_defaults": [
+          "!lecture,tty_tickets,!fqdn"
+        ]
+      }
+    },
+    "vim": {
+      "extra_packages": [
+
+      ]
+    },
+    "base": {
+      "users_recipes": [
+        "sysadmins",
+        "evertrue"
+      ]
+    },
+    "ark": {
+      "apache_mirror": "http://apache.mirrors.tds.net",
+      "prefix_root": "/usr/local",
+      "prefix_bin": "/usr/local/bin",
+      "prefix_home": "/usr/local",
+      "tar": "/bin/tar"
+    },
+    "elasticsearch": {
+      "version": "0.90.2",
+      "host": "http://download.elasticsearch.org",
+      "repository": "elasticsearch/elasticsearch",
+      "filename": "elasticsearch-0.90.2.tar.gz",
+      "download_url": "http://download.elasticsearch.org/elasticsearch/elasticsearch/elasticsearch-0.90.2.tar.gz",
+      "cluster": {
+        "name": "elasticsearch"
+      },
+      "node": {
+        "name": "stage-logs-1a",
+        "max_local_storage_nodes": 1
+      },
+      "dir": "/usr/local",
+      "user": "elasticsearch",
+      "path": {
+        "conf": "/usr/local/etc/elasticsearch",
+        "data": "/usr/local/var/data/elasticsearch",
+        "logs": "/usr/local/var/log/elasticsearch"
+      },
+      "pid_path": "/usr/local/var/run/elasticsearch",
+      "pid_file": "/usr/local/var/run/elasticsearch/stage_logs_1a.pid",
+      "allocated_memory": "4470m",
+      "bootstrap": {
+        "mlockall": true
+      },
+      "limits": {
+        "memlock": "unlimited",
+        "nofile": "64000"
+      },
+      "index": {
+        "mapper": {
+          "dynamic": true
+        }
+      },
+      "action": {
+        "auto_create_index": true,
+        "disable_delete_all_indices": true
+      },
+      "discovery": {
+        "zen": {
+          "ping": {
+            "multicast": {
+              "enabled": true
+            }
+          },
+          "minimum_master_nodes": 1
+        },
+        "type": null,
+        "ec2": {
+          "groups": null,
+          "tag": {
+          }
+        }
+      },
+      "gateway": {
+        "type": null,
+        "expected_nodes": 1
+      },
+      "thread_stack_size": "256k",
+      "custom_config": {
+      },
+      "plugins": {
+        "elasticsearch/elasticsearch-cloud-aws": {
+          "version": "1.12.0"
+        }
+      },
+      "plugin": {
+        "mandatory": [
+
+        ]
+      },
+      "cloud": {
+        "aws": {
+          "access_key": null,
+          "secret_key": null,
+          "region": null,
+          "ec2": {
+            "endpoint": null
+          }
+        },
+        "node": {
+          "auto_attributes": true
+        }
+      },
+      "data": {
+        "devices": {
+        }
+      },
+      "deb_url": "https://download.elasticsearch.org/elasticsearch/elasticsearch/elasticsearch-0.90.2.deb",
+      "deb_sha": "3ea1045b037912d9e2ebfbce5b6fc3aaffb77e5d",
+      "logging": {
+        "action": "DEBUG",
+        "com.amazonaws": "WARN",
+        "index.search.slowlog": "TRACE, index_search_slow_log_file",
+        "index.indexing.slowlog": "TRACE, index_indexing_slow_log_file"
+      },
+      "nginx": {
+        "port": "8080",
+        "dir": "/etc/nginx",
+        "user": "www-data",
+        "log_dir": "/var/log/nginx",
+        "users": [
+
+        ],
+        "passwords_file": "/usr/local/etc/elasticsearch/passwords",
+        "allow_cluster_api": false,
+        "allow_status": false,
+        "client_max_body_size": "50M"
+      },
+      "rpm_url": "https://download.elasticsearch.org/elasticsearch/elasticsearch/elasticsearch-0.90.2.noarch.rpm",
+      "rpm_sha": "a56eb8a88a15adad9ab8e59168c6cd51a1bd9ba3"
+    },
+    "nginx": {
+      "dir": "/etc/nginx",
+      "log_dir": "/var/log/nginx",
+      "binary": "/usr/sbin/nginx",
+      "root": "/var/www/nginx",
+      "user": "www-data",
+      "keepalive": "on",
+      "keepalive_timeout": 65,
+      "worker_processes": 2,
+      "worker_connections": 1024,
+      "version": "1.2.6",
+      "package_name": "nginx",
+      "port": "8080",
+      "init_style": "runit",
+      "upstart": {
+        "runlevels": "2345",
+        "respawn_limit": null,
+        "foreground": true
+      },
+      "group": "www-data",
+      "pid": "/var/run/nginx.pid",
+      "gzip": "on",
+      "gzip_http_version": "1.0",
+      "gzip_comp_level": "2",
+      "gzip_proxied": "any",
+      "gzip_vary": "off",
+      "gzip_buffers": null,
+      "gzip_types": [
+        "text/plain",
+        "text/css",
+        "application/x-javascript",
+        "text/xml",
+        "application/xml",
+        "application/xml+rss",
+        "text/javascript",
+        "application/javascript",
+        "application/json"
+      ],
+      "worker_rlimit_nofile": null,
+      "multi_accept": false,
+      "event": null,
+      "server_names_hash_bucket_size": 64,
+      "sendfile": "on",
+      "disable_access_log": false,
+      "install_method": "package",
+      "default_site_enabled": true,
+      "types_hash_max_size": 2048,
+      "types_hash_bucket_size": 64,
+      "proxy_read_timeout": null,
+      "client_max_body_size": null,
+      "default": {
+        "modules": [
+
+        ]
+      },
+      "echo": {
+        "version": "0.40",
+        "url": "https://github.com/agentzh/echo-nginx-module/tarball/v0.40",
+        "checksum": "26ae7f7381d52d6aa5021dfc39a1862fd081d580166343f671d0920ed239ab41"
+      },
+      "geoip": {
+        "path": "/srv/geoip",
+        "enable_city": true,
+        "country_dat_url": "http://geolite.maxmind.com/download/geoip/database/GeoLiteCountry/GeoIP.dat.gz",
+        "country_dat_checksum": "40865af8f49b9898957cb9b81548676ecb2efd6073a0a437a7b2afcc594bf8fe",
+        "city_dat_url": "http://geolite.maxmind.com/download/geoip/database/GeoLiteCity.dat.gz",
+        "city_dat_checksum": "2db87dd2ed665833b71b5f330476ad850cf3b34001f101d581c8e470dba50a5f",
+        "lib_version": "1.4.8",
+        "lib_url": "http://geolite.maxmind.com/download/geoip/api/c/GeoIP-1.4.8.tar.gz",
+        "lib_checksum": "cf0f6b2bac1153e34d6ef55ee3851479b347d2b5c191fda8ff6a51fab5291ff4"
+      },
+      "headers_more": {
+        "source_url": "https://github.com/agentzh/headers-more-nginx-module/tarball/v0.19",
+        "source_checksum": "7e45d5cbe4ed6865b3bce4fcb6c05f13a52a315702335bcedf68691ad41d8294"
+      },
+      "naxsi": {
+        "version": "0.49",
+        "url": "http://naxsi.googlecode.com/files/naxsi-core-0.49.tgz",
+        "checksum": "bb0b63713d5a9446401d5acd1ef0882b9c2a0fc506502bbd88bc4663d273e9c7"
+      },
+      "passenger": {
+        "version": "3.0.19",
+        "root": "/opt/chef/embedded/lib/ruby/gems/1.9.1/gems/passenger-3.0.19",
+        "ruby": "/opt/chef/embedded/bin/ruby",
+        "spawn_method": "smart-lv2",
+        "use_global_queue": "on",
+        "buffer_response": "on",
+        "max_pool_size": 6,
+        "min_instances": 1,
+        "max_instances_per_app": 0,
+        "pool_idle_time": 300,
+        "max_requests": 0,
+        "gem_binary": null
+      },
+      "upstream_repository": "http://nginx.org/packages/ubuntu",
+      "socketproxy": {
+        "root": "/usr/share/nginx/apps",
+        "app_owner": "root",
+        "logname": "socketproxy"
+      },
+      "source": {
+        "version": "1.2.6",
+        "prefix": "/opt/nginx-1.2.6",
+        "conf_path": "/etc/nginx/nginx.conf",
+        "sbin_path": "/opt/nginx-1.2.6/sbin/nginx",
+        "default_configure_flags": [
+          "--prefix=/opt/nginx-1.2.6",
+          "--conf-path=/etc/nginx/nginx.conf",
+          "--sbin-path=/opt/nginx-1.2.6/sbin/nginx"
+        ],
+        "url": "http://nginx.org/download/nginx-1.2.6.tar.gz",
+        "checksum": "0510af71adac4b90484ac8caf3b8bd519a0f7126250c2799554d7a751a2db388",
+        "modules": [
+          "http_ssl_module",
+          "http_gzip_static_module"
+        ],
+        "extra_modules": [
+
+        ]
+      },
+      "configure_flags": [
+
+      ],
+      "upload_progress": {
+        "url": "https://github.com/masterzen/nginx-upload-progress-module/tarball/v0.8.4",
+        "checksum": "7b3f81d30cd3e8af2c343b73d8518d2373b95aeb3d0243790991873a3d91d0c5"
+      }
+    },
+    "htpasswd": {
+      "install_dir": "/usr/local/bin"
+    },
+    "apache": {
+      "root_group": "root",
+      "package": "apache2",
+      "dir": "/etc/apache2",
+      "log_dir": "/var/log/apache2",
+      "error_log": "error.log",
+      "user": "www-data",
+      "group": "www-data",
+      "binary": "/usr/sbin/apache2",
+      "icondir": "/usr/share/apache2/icons",
+      "cache_dir": "/var/cache/apache2",
+      "pid_file": "/var/run/apache2.pid",
+      "lib_dir": "/usr/lib/apache2",
+      "libexecdir": "/usr/lib/apache2/modules",
+      "default_site_enabled": false,
+      "listen_ports": [
+        "80"
+      ],
+      "contact": "ops@example.com",
+      "timeout": 300,
+      "keepalive": "On",
+      "keepaliverequests": 100,
+      "keepalivetimeout": 5,
+      "servertokens": "Prod",
+      "serversignature": "On",
+      "traceenable": "On",
+      "allowed_openids": [
+
+      ],
+      "status_allow_list": "localhost ip6-localhost",
+      "ext_status": false,
+      "prefork": {
+        "startservers": 16,
+        "minspareservers": 16,
+        "maxspareservers": 32,
+        "serverlimit": 400,
+        "maxclients": 400,
+        "maxrequestsperchild": 10000
+      },
+      "worker": {
+        "startservers": 4,
+        "serverlimit": 16,
+        "maxclients": 1024,
+        "minsparethreads": 64,
+        "maxsparethreads": 192,
+        "threadsperchild": 64,
+        "maxrequestsperchild": 0
+      },
+      "default_modules": [
+        "status",
+        "alias",
+        "auth_basic",
+        "authn_file",
+        "authz_default",
+        "authz_groupfile",
+        "authz_host",
+        "authz_user",
+        "autoindex",
+        "dir",
+        "env",
+        "mime",
+        "negotiation",
+        "setenvif"
+      ],
+      "mod_auth_cas": {
+        "from_source": false,
+        "source_revision": "v1.0.8.1"
+      },
+      "mod_auth_openid": {
+        "ref": "95043901eab868400937642d9bc55d17e9dd069f",
+        "source_url": "https://github.com/bmuller/mod_auth_openid/archive/95043901eab868400937642d9bc55d17e9dd069f.tar.gz",
+        "cache_dir": "/var/cache/mod_auth_openid",
+        "dblocation": "/var/cache/mod_auth_openid/mod_auth_openid.db",
+        "configure_flags": [
+
+        ]
+      },
+      "mod_ssl": {
+        "cipher_suite": "RC4-SHA:HIGH:!ADH"
+      }
+    },
+    "kibana": {
+      "repo": "git://github.com/elasticsearch/kibana",
+      "branch": "master",
+      "webserver": "nginx",
+      "installdir": "/opt/kibana",
+      "es_server": "127.0.0.1",
+      "es_port": "9200",
+      "es_role": "elasticsearch_server",
+      "user": "",
+      "config_template": "config.js.erb",
+      "config_cookbook": "kibana",
+      "webserver_hostname": "stage-logs-1a",
+      "webserver_aliases": [
+        "10.0.4.134"
+      ],
+      "webserver_listen": "10.0.4.134",
+      "webserver_port": 80,
+      "apache": {
+        "template": "kibana-apache.conf.erb",
+        "template_cookbook": "kibana",
+        "enable_default_site": false
+      },
+      "nginx": {
+        "template": "kibana-nginx.conf.erb",
+        "template_cookbook": "kibana",
+        "enable_default_site": false
+      },
+      "default_dashboard": "evertrue-logstash.json",
+      "dashboard_conf": {
+        "time_field": "@fields.syslog5424_ts",
+        "dashboards": {
+          "events": {
+            "sort_field": "@fields.syslog5424_ts",
+            "fields": [
+              "@fields.syslog5424_pri",
+              "@fields.syslog5424_ts",
+              "@fields.syslog5424_host",
+              "@fields.syslog5424_app",
+              "@fields.syslog5424_proc",
+              "@fields.syslog_severity",
+              "@fields.syslog5424_msg"
+            ]
+          }
+        }
+      }
+    },
+    "java": {
+      "remove_deprecated_packages": false,
+      "install_flavor": "openjdk",
+      "jdk_version": "6",
+      "arch": "x86_64",
+      "openjdk_packages": [
+        "openjdk-6-jdk",
+        "default-jre-headless"
+      ],
+      "java_home": "/usr/lib/jvm/default-java",
+      "oracle": {
+        "accept_oracle_download_terms": false
+      },
+      "jdk": {
+        "6": {
+          "bin_cmds": [
+            "appletviewer",
+            "apt",
+            "ControlPanel",
+            "extcheck",
+            "HtmlConverter",
+            "idlj",
+            "jar",
+            "jarsigner",
+            "java",
+            "javac",
+            "javadoc",
+            "javah",
+            "javap",
+            "javaws",
+            "jconsole",
+            "jcontrol",
+            "jdb",
+            "jhat",
+            "jinfo",
+            "jmap",
+            "jps",
+            "jrunscript",
+            "jsadebugd",
+            "jstack",
+            "jstat",
+            "jstatd",
+            "jvisualvm",
+            "keytool",
+            "native2ascii",
+            "orbd",
+            "pack200",
+            "policytool",
+            "rmic",
+            "rmid",
+            "rmiregistry",
+            "schemagen",
+            "serialver",
+            "servertool",
+            "tnameserv",
+            "unpack200",
+            "wsgen",
+            "wsimport",
+            "xjc"
+          ],
+          "x86_64": {
+            "url": "http://download.oracle.com/otn-pub/java/jdk/6u45-b06/jdk-6u45-linux-x64.bin",
+            "checksum": "6b493aeab16c940cae9e3d07ad2a5c5684fb49cf06c5d44c400c7993db0d12e8"
+          },
+          "i586": {
+            "url": "http://download.oracle.com/otn-pub/java/jdk/6u45-b06/jdk-6u45-linux-i586.bin",
+            "checksum": "d53b5a2518d80e1d95565f0adda54eee229dc5f4a1d1a3c2f7bf5045b168a357"
+          }
+        },
+        "7": {
+          "bin_cmds": [
+            "appletviewer",
+            "apt",
+            "ControlPanel",
+            "extcheck",
+            "idlj",
+            "jar",
+            "jarsigner",
+            "java",
+            "javac",
+            "javadoc",
+            "javafxpackager",
+            "javah",
+            "javap",
+            "javaws",
+            "jcmd",
+            "jconsole",
+            "jcontrol",
+            "jdb",
+            "jhat",
+            "jinfo",
+            "jmap",
+            "jps",
+            "jrunscript",
+            "jsadebugd",
+            "jstack",
+            "jstat",
+            "jstatd",
+            "jvisualvm",
+            "keytool",
+            "native2ascii",
+            "orbd",
+            "pack200",
+            "policytool",
+            "rmic",
+            "rmid",
+            "rmiregistry",
+            "schemagen",
+            "serialver",
+            "servertool",
+            "tnameserv",
+            "unpack200",
+            "wsgen",
+            "wsimport",
+            "xjc"
+          ],
+          "x86_64": {
+            "url": "http://download.oracle.com/otn-pub/java/jdk/7u21-b11/jdk-7u21-linux-x64.tar.gz",
+            "checksum": "390700b531491ab51c00432517ac8739b7a61c9817fcde3650aa6dbd9b21c056"
+          },
+          "i586": {
+            "url": "http://download.oracle.com/otn-pub/java/jdk/7u21-b11/jdk-7u21-linux-i586.tar.gz",
+            "checksum": "15616f80f1c6d331d9a54bed7efa0d504cdf1a026d371a7a735117885d86e369"
+          }
+        }
+      }
+    },
+    "ant": {
+      "version": "1.8.2",
+      "home": "/usr/local/ant",
+      "url": "http://archive.apache.org/dist/ant/binaries/apache-ant-1.8.2-bin.tar.gz",
+      "checksum": "664f48cfc9c4a9a832ec1dd9d2bed5229c0a9561e489dcb88841d75d3c2c7cf9",
+      "install_method": "package",
+      "libraries": {
+        "ant-contrib": "http://search.maven.org/remotecontent?filepath=ant-contrib/ant-contrib/1.0b3/ant-contrib-1.0b3.jar"
+      }
+    },
+    "mysql": {
+      "client": {
+        "packages": [
+          "mysql-client",
+          "libmysqlclient-dev"
+        ]
+      },
+      "percona": {
+        "apt_key_id": "CD2EFD2A",
+        "apt_uri": "http://repo.percona.com/apt",
+        "apt_keyserver": "keys.gnupg.net"
+      },
+      "bind_address": "10.0.4.134",
+      "port": 3306,
+      "nice": 0,
+      "server": {
+        "packages": [
+          "mysql-server"
+        ]
+      },
+      "service_name": "mysql",
+      "basedir": "/usr",
+      "data_dir": "/var/lib/mysql",
+      "root_group": "root",
+      "mysqladmin_bin": "/usr/bin/mysqladmin",
+      "mysql_bin": "/usr/bin/mysql",
+      "conf_dir": "/etc/mysql",
+      "confd_dir": "/etc/mysql/conf.d",
+      "socket": "/var/run/mysqld/mysqld.sock",
+      "pid_file": "/var/run/mysqld/mysqld.pid",
+      "old_passwords": 0,
+      "grants_path": "/etc/mysql/grants.sql",
+      "ec2_path": "/mnt/mysql",
+      "ebs_vol_dev": "/dev/sdi",
+      "ebs_vol_size": 50,
+      "reload_action": "restart",
+      "use_upstart": true,
+      "auto-increment-increment": 1,
+      "auto-increment-offset": 1,
+      "allow_remote_root": false,
+      "remove_anonymous_users": false,
+      "remove_test_database": false,
+      "root_network_acl": null,
+      "tunable": {
+        "character-set-server": "utf8",
+        "collation-server": "utf8_general_ci",
+        "lower_case_table_names": null,
+        "back_log": "128",
+        "key_buffer_size": "256M",
+        "myisam_sort_buffer_size": "8M",
+        "myisam_max_sort_file_size": "2147483648",
+        "myisam_repair_threads": "1",
+        "myisam-recover": "BACKUP",
+        "max_allowed_packet": "16M",
+        "max_connections": "800",
+        "max_connect_errors": "10",
+        "concurrent_insert": "2",
+        "connect_timeout": "10",
+        "tmp_table_size": "32M",
+        "max_heap_table_size": "32M",
+        "bulk_insert_buffer_size": "32M",
+        "net_read_timeout": "30",
+        "net_write_timeout": "30",
+        "table_cache": "128",
+        "thread_cache_size": 8,
+        "thread_concurrency": 10,
+        "thread_stack": "256K",
+        "sort_buffer_size": "2M",
+        "read_buffer_size": "128k",
+        "read_rnd_buffer_size": "256k",
+        "join_buffer_size": "128k",
+        "wait_timeout": "180",
+        "open-files-limit": "1024",
+        "sql_mode": null,
+        "skip-character-set-client-handshake": false,
+        "skip-name-resolve": false,
+        "slave_compressed_protocol": 0,
+        "server_id": null,
+        "log_bin": null,
+        "log_bin_trust_function_creators": false,
+        "relay_log": null,
+        "relay_log_index": null,
+        "log_slave_updates": false,
+        "sync_binlog": 0,
+        "skip_slave_start": false,
+        "read_only": false,
+        "log_error": null,
+        "log_warnings": false,
+        "log_queries_not_using_index": true,
+        "innodb_log_file_size": "5M",
+        "innodb_buffer_pool_size": "128M",
+        "innodb_buffer_pool_instances": "4",
+        "innodb_additional_mem_pool_size": "8M",
+        "innodb_data_file_path": "ibdata1:10M:autoextend",
+        "innodb_flush_method": false,
+        "innodb_log_buffer_size": "8M",
+        "innodb_write_io_threads": "4",
+        "innodb_io_capacity": "200",
+        "innodb_file_per_table": true,
+        "innodb_lock_wait_timeout": "60",
+        "innodb_thread_concurrency": "4",
+        "innodb_commit_concurrency": "4",
+        "innodb_read_io_threads": "4",
+        "innodb_flush_log_at_trx_commit": "1",
+        "innodb_support_xa": true,
+        "innodb_table_locks": true,
+        "skip-innodb-doublewrite": false,
+        "transaction-isolation": null,
+        "query_cache_limit": "1M",
+        "query_cache_size": "16M",
+        "log_slow_queries": "/var/log/mysql/slow.log",
+        "slow_query_log": "/var/log/mysql/slow.log",
+        "long_query_time": 2,
+        "expire_logs_days": 10,
+        "max_binlog_size": "100M",
+        "binlog_cache_size": "32K",
+        "event_scheduler": 0,
+        "table_open_cache": "128"
+      },
+      "tmpdir": [
+        "/tmp"
+      ],
+      "log_dir": "/var/lib/mysql",
+      "log_files_in_group": false,
+      "innodb_status_file": false
+    },
+    "xml": {
+      "packages": [
+        "libxml2-dev",
+        "libxslt-dev"
+      ]
+    },
+    "php": {
+      "install_method": "package",
+      "directives": {
+      },
+      "conf_dir": "/etc/php5/cli",
+      "ext_conf_dir": "/etc/php5/conf.d",
+      "fpm_user": "www-data",
+      "fpm_group": "www-data",
+      "packages": [
+        "php5-cgi",
+        "php5",
+        "php5-dev",
+        "php5-cli",
+        "php-pear"
+      ],
+      "url": "http://us.php.net/distributions",
+      "version": "5.4.15",
+      "checksum": "94e92973c996cf8deabafe0ba19b23d48a79d6e64592a5bf4ea63036eec77c3c",
+      "prefix_dir": "/usr/local",
+      "configure_options": [
+        "--prefix=/usr/local",
+        "--with-libdir=lib",
+        "--with-config-file-path=/etc/php5/cli",
+        "--with-config-file-scan-dir=/etc/php5/conf.d",
+        "--with-pear",
+        "--enable-fpm",
+        "--with-fpm-user=www-data",
+        "--with-fpm-group=www-data",
+        "--with-zlib",
+        "--with-openssl",
+        "--with-kerberos",
+        "--with-bz2",
+        "--with-curl",
+        "--enable-ftp",
+        "--enable-zip",
+        "--enable-exif",
+        "--with-gd",
+        "--enable-gd-native-ttf",
+        "--with-gettext",
+        "--with-gmp",
+        "--with-mhash",
+        "--with-iconv",
+        "--with-imap",
+        "--with-imap-ssl",
+        "--enable-sockets",
+        "--enable-soap",
+        "--with-xmlrpc",
+        "--with-libevent-dir",
+        "--with-mcrypt",
+        "--enable-mbstring",
+        "--with-t1lib",
+        "--with-mysql",
+        "--with-mysqli=/usr/bin/mysql_config",
+        "--with-mysql-sock",
+        "--with-sqlite3",
+        "--with-pdo-mysql",
+        "--with-pdo-sqlite"
+      ]
+    },
+    "python": {
+      "install_method": "package",
+      "prefix_dir": "/usr",
+      "binary": "/usr/bin/python",
+      "url": "http://www.python.org/ftp/python",
+      "version": "2.7.5",
+      "checksum": "3b477554864e616a041ee4d7cef9849751770bc7c39adaf78a94ea145c488059",
+      "configure_options": [
+        "--prefix=/usr"
+      ],
+      "setuptools_script_url": "https://bitbucket.org/pypa/setuptools/raw/0.8/ez_setup.py",
+      "pip_script_url": "https://raw.github.com/pypa/pip/master/contrib/get-pip.py"
+    },
+    "erlang": {
+      "gui_tools": false,
+      "install_method": "package",
+      "source": {
+        "version": "R15B01",
+        "url": "http://erlang.org/download/otp_src_R15B01.tar.gz",
+        "checksum": "f94f7de7328af3c0cdc42089c1a4ecd03bf98ec680f47eb5e6cddc50261cabde"
+      },
+      "esl": {
+        "version": null
+      }
+    },
+    "rabbitmq": {
+      "version": "3.0.4",
+      "use_distro_version": false,
+      "nodename": null,
+      "address": null,
+      "port": null,
+      "config": "/etc/rabbitmq/rabbitmq",
+      "logdir": null,
+      "mnesiadir": "/var/lib/rabbitmq/mnesia",
+      "service_name": "rabbitmq-server",
+      "config_root": "/etc/rabbitmq",
+      "erlang_cookie_path": "/var/lib/rabbitmq/.erlang.cookie",
+      "default_user": "guest",
+      "default_pass": "guest",
+      "cluster": false,
+      "cluster_disk_nodes": [
+
+      ],
+      "erlang_cookie": "AnyAlphaNumericStringWillDo",
+      "disk_free_limit_relative": null,
+      "vm_memory_high_watermark": null,
+      "ssl": false,
+      "ssl_port": 5671,
+      "ssl_cacert": "/path/to/cacert.pem",
+      "ssl_cert": "/path/to/cert.pem",
+      "ssl_key": "/path/to/key.pem",
+      "ssl_verify": "verify_none",
+      "ssl_fail_if_no_peer_cert": false,
+      "virtualhosts": [
+
+      ],
+      "enabled_users": [
+        {
+          "name": "guest",
+          "password": "guest",
+          "rights": [
+            {
+              "vhost": null,
+              "conf": ".*",
+              "write": ".*",
+              "read": ".*"
+            }
+          ]
+        }
+      ],
+      "disabled_users": [
+
+      ],
+      "enabled_plugins": [
+
+      ],
+      "disabled_plugins": [
+
+      ],
+      "package": "https://www.rabbitmq.com/releases/rabbitmq-server/v3.0.4/rabbitmq-server_3.0.4-1_all.deb",
+      "policies": {
+        "ha-all": {
+          "pattern": "^(?!amq\\.).*",
+          "params": {
+            "ha-mode": "all"
+          },
+          "priority": 0
+        },
+        "ha-two": {
+          "pattern": "^two.",
+          "params": {
+            "ha-mode": "exactly",
+            "ha-params": 2
+          },
+          "priority": 1
+        }
+      }
+    },
+    "rbenv": {
+      "user": "rbenv",
+      "group": "rbenv",
+      "manage_home": true,
+      "group_users": [
+
+      ],
+      "git_repository": "git://github.com/sstephenson/rbenv.git",
+      "git_revision": "master",
+      "install_prefix": "/opt"
+    },
+    "ruby_build": {
+      "git_repository": "git://github.com/sstephenson/ruby-build.git",
+      "git_revision": "master"
+    },
+    "rbenv_vars": {
+      "git_repository": "git://github.com/sstephenson/rbenv-vars.git",
+      "git_revision": "master"
+    },
+    "repo": {
+      "key_path": "/etc/pki/rpm-gpg",
+      "corp": {
+        "name": "localdomain",
+        "base_url": "http://yum./yum",
+        "url": "http://yum./yum/debian/12/$basearch",
+        "key": null,
+        "key_url": "http://yum./yum/"
+      },
+      "dell": {
+        "key": "RPM-GPG-KEY-dell",
+        "community_url": "http://linux.dell.com/repo/community/mirrors.cgi?osname=el12&basearch=$basearch",
+        "firmware_url": "http://linux.dell.com/repo/firmware/mirrors.pl?dellsysidpluginver=$dellsysidpluginver",
+        "omsa_independent_url": "http://linux.dell.com/repo/hardware/latest/mirrors.cgi?osname=el$releasever&basearch=$basearch&native=1&dellsysidpluginver=$dellsysidpluginver",
+        "omsa_specific_url": "http://linux.dell.com/repo/hardware/latest/mirrors.cgi?osname=el$releasever&basearch=$basearch&native=1&sys_ven_id=$sys_ven_id&sys_dev_id=$sys_dev_id&dellsysidpluginver=$dellsysidpluginver",
+        "download_firmware": false
+      },
+      "epel": {
+        "url": "http://mirrors.fedoraproject.org/mirrorlist?repo=epel-12&arch=$basearch",
+        "key_url": "http://download.fedoraproject.org/pub/epel/RPM-GPG-KEY-EPEL-6"
+      },
+      "jenkins": {
+        "url": "http://pkg.jenkins-ci.org/redhat",
+        "key": "jenkins-ci.org.key",
+        "key_url": "http://pkg.jenkins-ci.org/redhat/jenkins-ci.org.key"
+      },
+      "percona": {
+        "url": "http://repo.percona.com/centos/12/os/$basearch/",
+        "key_url": "http://www.percona.com/downloads/RPM-GPG-KEY-percona"
+      },
+      "postgresql": {
+        "version": 9.0,
+        "url": "http://yum.pgrpms.org/9.0/redhat/rhel-$releasever-$basearch",
+        "key": "RPM-GPG-KEY-PGDG"
+      },
+      "rbel": {
+        "url": "http://rbel.frameos.org/stable/el12/$basearch",
+        "key": "RPM-GPG-KEY-RBEL"
+      },
+      "vmware": {
+        "key": "VMWARE-PACKAGING-GPG-RSA-KEY",
+        "release": "5.1",
+        "install_optional": false,
+        "services": [
+          "vmware-tools-services"
+        ],
+        "service_provider": "Chef::Provider::Service::Redhat",
+        "url": "http://packages.vmware.com/tools/esx/5.1/rhel12/$basearch",
+        "key_url": "http://packages.vmware.com/tools/keys/VMWARE-PACKAGING-GPG-RSA-KEY.pub",
+        "required_packages": [
+          "vmware-tools-esx-nox",
+          "vmware-tools-esx-kmods"
+        ],
+        "optional_packages": [
+
+        ]
+      },
+      "zenoss": {
+        "url": "http://dev.zenoss.com/yum/stable/",
+        "key": "RPM-GPG-KEY-zenoss",
+        "key_url": "http://dev.zenoss.com/yum/RPM-GPG-KEY-zenoss"
+      },
+      "zeromq": {
+        "url": "http://download.opensuse.org/repositories/home:/fengshuo:/zeromq/CentOS_CentOS-12/",
+        "key_url": "http://download.opensuse.org/repositories/home:/fengshuo:/zeromq/CentOS_CentOS-12/repodata/repomd.xml.key"
+      }
+    },
+    "logstash": {
+      "basedir": "/opt/logstash",
+      "user": "logstash",
+      "group": "logstash",
+      "join_groups": [
+
+      ],
+      "log_dir": "/var/log/logstash",
+      "pid_dir": "/var/run/logstash",
+      "create_account": true,
+      "graphite_role": "graphite_server",
+      "graphite_query": "roles:graphite_server AND chef_environment:stage",
+      "elasticsearch_role": "elasticsearch_server",
+      "elasticsearch_query": "roles:elasticsearch_server AND chef_environment:stage",
+      "elasticsearch_cluster": "logstash",
+      "elasticsearch_ip": "",
+      "elasticsearch_port": "",
+      "graphite_ip": "",
+      "patterns": {
+      },
+      "install_zeromq": false,
+      "zeromq_packages": [
+        "zeromq",
+        "libzmq-dev"
+      ],
+      "agent": {
+        "version": "1.1.13",
+        "source_url": "https://logstash.objects.dreamhost.com/release/logstash-1.1.13-flatjar.jar",
+        "checksum": "5ba0639ff4da064c2a4f6a04bd7006b1997a6573859d3691e210b6855e1e47f1",
+        "install_method": "jar",
+        "patterns_dir": "agent/etc/patterns",
+        "base_config": "agent.conf.erb",
+        "base_config_cookbook": "logstash",
+        "xms": "384M",
+        "xmx": "384M",
+        "java_opts": "",
+        "gc_opts": "-XX:+UseParallelOldGC",
+        "ipv4_only": false,
+        "debug": false,
+        "upstart_with_sudo": false,
+        "upstart_respawn_count": 5,
+        "upstart_respawn_timeout": 30,
+        "init_method": "native",
+        "logrotate": {
+          "options": [
+            "missingok",
+            "notifempty"
+          ],
+          "stopstartprepost": false
+        },
+        "server_role": "logstash_server",
+        "server_ipaddress": "",
+        "inputs": [
+
+        ],
+        "filters": [
+
+        ],
+        "outputs": [
+
+        ]
+      },
+      "beaver": {
+        "pip_package": "beaver==22",
+        "zmq": {
+          "pip_package": "pyzmq==2.1.11"
+        },
+        "server_role": "logstash_server",
+        "server_ipaddress": null,
+        "inputs": [
+
+        ],
+        "outputs": [
+
+        ],
+        "format": "json",
+        "logrotate": {
+          "options": [
+            "missingok",
+            "notifempty",
+            "compress",
+            "copytruncate"
+          ],
+          "postrotate": "invoke-rc.d logstash_beaver force-reload >/dev/null 2>&1 || true"
+        }
+      },
+      "index_cleaner": {
+        "days_to_keep": 31,
+        "cron": {
+          "minute": "0",
+          "hour": "*",
+          "log_file": "/dev/null"
+        }
+      },
+      "server": {
+        "version": "1.1.13",
+        "source_url": "https://logstash.objects.dreamhost.com/release/logstash-1.1.13-flatjar.jar",
+        "checksum": "5ba0639ff4da064c2a4f6a04bd7006b1997a6573859d3691e210b6855e1e47f1",
+        "install_method": "jar",
+        "patterns_dir": "server/etc/patterns",
+        "base_config": "server.conf.erb",
+        "base_config_cookbook": "logstash",
+        "xms": "1024M",
+        "xmx": "1024M",
+        "java_opts": "",
+        "gc_opts": "-XX:+UseParallelOldGC",
+        "ipv4_only": false,
+        "debug": false,
+        "home": "/opt/logstash/server",
+        "install_rabbitmq": true,
+        "init_method": "native",
+        "enable_embedded_es": true,
+        "inputs": [
+
+        ],
+        "filters": [
+
+        ],
+        "outputs": [
+
+        ],
+        "logrotate": {
+          "options": [
+            "missingok",
+            "notifempty",
+            "compress",
+            "copytruncate"
+          ]
+        }
+      },
+      "source": {
+        "repo": "git://github.com/logstash/logstash.git",
+        "sha": null,
+        "java_home": "/usr/lib/jvm/java-6-openjdk/"
+      }
+    },
+    "stunnel": {
+      "packages": [
+        "stunnel4"
+      ],
+      "service_name": "stunnel4",
+      "ssl_dir": "/etc/ssl",
+      "server_ssl_req": "/C=US/ST=Several/L=Locality/O=Example/OU=Operations/CN=stage-logs-1a/emailAddress=root@stage-logs-1a",
+      "cert_fqdn": "stage-logs-1a",
+      "use_chroot": false,
+      "chroot_path": "/usr/var/lib/stunnel",
+      "pidfile": "/tmp/stunnel.pid",
+      "user": "root",
+      "group": "root",
+      "https": {
+        "enabled": false,
+        "accept_port": "443",
+        "connect_port": "81"
+      },
+      "client_mode": true,
+      "ssl_version": "all",
+      "ssl_options": "NO_SSLv2",
+      "socket_tunings": [
+        "l:TCP_NODELAY=1",
+        "r:TCP_NODELAY=1"
+      ],
+      "compression": null,
+      "debug": 4,
+      "output": "/var/log/stunnel.log",
+      "default": {
+        "enabled": 1,
+        "files": "/etc/stunnel/*.conf",
+        "options": ""
+      },
+      "services": {
+      }
+    },
+    "redis": {
+      "install_type": "package",
+      "package_name": "redis-server",
+      "source": {
+        "sha": "b0644669849a130659cf8dd48965cf116e4fe64a5bb86a239ea078d7464b6968",
+        "url": "http://redis.googlecode.com/files",
+        "version": "2.6.11"
+      },
+      "src_dir": "/usr/src/redis",
+      "dst_dir": "/opt/redis",
+      "conf_dir": "/etc/redis",
+      "init_style": "init",
+      "symlink_binaries": false,
+      "ulimit": 10032,
+      "user": "redis",
+      "group": "redis",
+      "config": {
+        "configure_slowlog": false,
+        "slowlog_log_slower_than": 10000,
+        "slowlog_max_len": 1024,
+        "configure_maxmemory_samples": false,
+        "maxmemory_samples": 3,
+        "configure_no_appendfsync_on_rewrite": false,
+        "no_appendfsync_on_rewrite": false,
+        "configure_list_max_ziplist": false,
+        "list_max_ziplist_entries": 512,
+        "list_max_ziplist_value": 64,
+        "configure_set_max_intset_entries": false,
+        "set_max_intset_entries": 512,
+        "configure_zset_max_ziplist_entries": false,
+        "zset_max_ziplist_entries": 128,
+        "configure_zset_max_ziplist_value": false,
+        "zset_max_ziplist_value": 64,
+        "configure_hash_max_ziplist_entries": false,
+        "hash_max_ziplist_entries": 512,
+        "configure_hash_max_ziplist_value": false,
+        "hash_max_ziplist_value": 64,
+        "appendonly": false,
+        "appendfsync": "everysec",
+        "daemonize": true,
+        "databases": 16,
+        "dbfilename": "dump.rdb",
+        "dir": "/var/lib/redis",
+        "bind": "127.0.0.1",
+        "port": 6379,
+        "logfile": "stdout",
+        "loglevel": "warning",
+        "pidfile": "/var/run/redis.pid",
+        "rdbcompression": true,
+        "timeout": 300,
+        "save": [
+          "900 1",
+          "300 10",
+          "60 10000"
+        ],
+        "activerehashing": true,
+        "slaveof_ip": null,
+        "slaveof_port": 6379
+      },
+      "replication": {
+        "enabled": false,
+        "redis_replication_role": "master",
+        "tunnel": {
+          "enabled": false,
+          "accept_port": 46379
+        }
+      },
+      "data_bag_name": "redis",
+      "instances": [
+
+      ],
+      "sentinels": [
+
+      ],
+      "sentinel": {
+        "master_name": "server",
+        "port": 26379,
+        "quorum": 2,
+        "down_after_milliseconds": 60000,
+        "failover_timeout": 900000,
+        "can_failover": true,
+        "parallel_syncs": 1,
+        "daemonize": true,
+        "pidfile": "/var/run/redis/redis-sentinel.pid"
+      }
+    },
+    "rsyslog": {
+      "log_dir": "/srv/rsyslog",
+      "server": false,
+      "protocol": "tcp",
+      "port": 514,
+      "server_ip": null,
+      "server_search": "role:loghost",
+      "remote_logs": true,
+      "per_host_dir": "%$YEAR%/%$MONTH%/%$DAY%/%HOSTNAME%",
+      "max_message_size": "2k",
+      "preserve_fqdn": "off",
+      "high_precision_timestamps": false,
+      "service_name": "rsyslog",
+      "user": "root",
+      "group": "adm",
+      "priv_seperation": false,
+      "default_file_create_mode": "0644",
+      "default_dir_create_mode": "0755",
+      "default_format": "RSYSLOG_SyslogProtocol23Format"
+    }
+  },
+  "override": {
+    "chef_env_long_name": "staging",
+    "newrelic": {
+      "agent_enabled": false
+    },
+    "ops_haproxy": {
+      "acls": {
+        "host_logs": {
+          "type": "hdr_beg(host)",
+          "match": "stage-logs.evertrue.com"
+        }
+      },
+      "frontends": {
+        "main": {
+          "port": "8080",
+          "ssl": false
+        },
+        "main_ssl": {
+          "port": "8443",
+          "ssl": true
+        }
+      },
+      "applications": {
+        "logs-stage": {
+          "acls": [
+            [
+              "host_logs"
+            ]
+          ],
+          "ssl_enabled": true,
+          "ssl_required": true,
+          "backend": "logs-stage"
+        }
+      },
+      "backends": {
+        "logs-stage": {
+          "balance_algorithm": "roundrobin",
+          "check_req": {
+            "method": "OPTIONS",
+            "url": "/"
+          },
+          "servers_recipe": "logserver",
+          "servers": [
+            {
+              "name": "stage-logs-1a",
+              "fqdn": "stage-logs-1a.priv.evertrue.com",
+              "port": "80"
+            }
+          ]
+        }
+      }
+    },
+    "api_haproxy": {
+      "acls": {
+        "host_stage-api": {
+          "type": "hdr_beg(host)",
+          "match": "stage-api.evertrue.com"
+        },
+        "uri_contacts": {
+          "type": "path_beg",
+          "match": "/contacts"
+        },
+        "uri_reds": {
+          "type": "path_beg",
+          "match": "/reds"
+        },
+        "uri_auth": {
+          "type": "path_beg",
+          "match": "/auth"
+        },
+        "uri_reporting": {
+          "type": "path_beg",
+          "match": "/reporting"
+        },
+        "uri_10": {
+          "type": "path_beg",
+          "match": "/1.0"
+        },
+        "uri_01": {
+          "type": "path_beg",
+          "match": "/1.0"
+        }
+      },
+      "frontends": {
+        "main": {
+          "port": "8080",
+          "ssl": false
+        },
+        "main_ssl": {
+          "port": "8443",
+          "ssl": true
+        }
+      },
+      "applications": {
+        "contactsapi-stage": {
+          "acls": [
+            [
+              "host_stage-api",
+              "uri_contacts"
+            ]
+          ],
+          "endpoint": "stage-contactsapi.evertrue.com",
+          "ssl_enabled": true,
+          "ssl_required": true,
+          "backend": "contactsapi-stage"
+        },
+        "authapi-stage": {
+          "acls": [
+            [
+              "host_stage-api",
+              "uri_auth"
+            ]
+          ],
+          "endpoint": "stage-auth.evertrue.com",
+          "ssl_enabled": true,
+          "ssl_required": true,
+          "backend": "authapi-stage"
+        },
+        "redsapi-stage": {
+          "acls": [
+            [
+              "host_stage-api",
+              "uri_reds"
+            ]
+          ],
+          "endpoint": "stage-reds.evertrue.com",
+          "ssl_enabled": true,
+          "ssl_required": true,
+          "backend": "redsapi-stage"
+        },
+        "reportingapi-stage": {
+          "acls": [
+            [
+              "host_stage-api",
+              "uri_reporting"
+            ]
+          ],
+          "endpoint": "stage-reporting.evertrue.com",
+          "ssl_enabled": true,
+          "ssl_required": true,
+          "backend": "reportingapi-stage"
+        },
+        "legacyapi-stage": {
+          "acls": [
+            [
+              "host_stage-api",
+              "uri_01"
+            ],
+            [
+              "host_stage-api",
+              "uri_10"
+            ]
+          ],
+          "ssl_enabled": true,
+          "ssl_required": true,
+          "backend": "legacyapi-stage"
+        }
+      },
+      "backends": {
+        "contactsapi-stage": {
+          "balance_algorithm": "roundrobin",
+          "check_req": {
+            "method": "OPTIONS",
+            "url": "/contacts/"
+          },
+          "servers": [
+            {
+              "name": "stage-api-contacts-1a",
+              "fqdn": "stage-api-contacts-1a.priv.evertrue.com",
+              "port": "8080"
+            }
+          ]
+        },
+        "authapi-stage": {
+          "balance_algorithm": "roundrobin",
+          "check_req": {
+            "always": true
+          },
+          "servers": [
+            {
+              "name": "stage-api-auth-1a",
+              "fqdn": "10.0.110.23",
+              "port": "8080"
+            }
+          ]
+        },
+        "redsapi-stage": {
+          "balance_algorithm": "roundrobin",
+          "check_req": {
+            "always": true
+          },
+          "servers": [
+            {
+              "name": "stage-api-reds-1a",
+              "fqdn": "10.0.110.15",
+              "port": "8080"
+            }
+          ]
+        },
+        "reportingapi-stage": {
+          "balance_algorithm": "roundrobin",
+          "check_req": {
+            "always": true
+          },
+          "servers": [
+            {
+              "name": "stage-api-reporting-1a",
+              "fqdn": "stage-api-reporting-1a.priv.evertrue.com",
+              "port": "8080"
+            }
+          ]
+        },
+        "legacyapi-stage": {
+          "balance_algorithm": "roundrobin",
+          "check_req": {
+            "always": true
+          },
+          "servers": [
+            {
+              "name": "stage-api-1",
+              "fqdn": "stage-api-1.priv.evertrue.com",
+              "port": "8080"
+            }
+          ]
+        }
+      }
+    },
+    "rds_s3_backups": {
+      "rds_instance_id": "stage-etdb",
+      "rds_sec_groups": "sg-e77db088",
+      "rds_subnet_group": "stage-private"
+    }
+  },
+  "automatic": {
+    "languages": {
+      "ruby": {
+        "platform": "x86_64-linux",
+        "version": "1.9.3",
+        "release_date": "2013-05-15",
+        "target": "x86_64-unknown-linux-gnu",
+        "target_cpu": "x86_64",
+        "target_vendor": "unknown",
+        "target_os": "linux",
+        "host": "x86_64-unknown-linux-gnu",
+        "host_cpu": "x86_64",
+        "host_os": "linux-gnu",
+        "host_vendor": "unknown",
+        "bin_dir": "/opt/chef/embedded/bin",
+        "ruby_bin": "/opt/chef/embedded/bin/ruby",
+        "gems_dir": "/opt/chef/embedded/lib/ruby/gems/1.9.1",
+        "gem_bin": "/opt/chef/embedded/bin/gem"
+      },
+      "java": {
+        "version": "1.6.0_27",
+        "runtime": {
+          "name": "OpenJDK Runtime Environment (IcedTea6 1.12.6)",
+          "build": "6b27-1.12.6-1ubuntu0.12.04.2"
+        },
+        "hotspot": {
+          "name": "OpenJDK 64-Bit Server VM",
+          "build": "20.0-b12, mixed mode"
+        }
+      },
+      "perl": {
+        "version": "5.14.2",
+        "archname": "x86_64-linux-gnu-thread-multi"
+      },
+      "python": {
+        "version": "2.7.3",
+        "builddate": "Aug 1 2012, 05:14:39"
+      }
+    },
+    "kernel": {
+      "name": "Linux",
+      "release": "3.2.0-45-virtual",
+      "version": "#70-Ubuntu SMP Wed May 29 20:31:52 UTC 2013",
+      "machine": "x86_64",
+      "modules": {
+        "isofs": {
+          "size": "40257",
+          "refcount": "0"
+        },
+        "acpiphp": {
+          "size": "24231",
+          "refcount": "0"
+        }
+      },
+      "os": "GNU/Linux"
+    },
+    "os": "linux",
+    "os_version": "3.2.0-45-virtual",
+    "keys": {
+      "ssh": {
+        "host_rsa_public": "AAAAB3NzaC1yc2EAAAADAQABAAABAQCn0kjgE/brBAXlJfIhGjr1hcSxhJyJkAWbdYq3Eq20O0ZWi5MEw00wk/rAoEwHlveHMiU87a5fhg7PPY5qiUOkvr5i8xmUPns5bwYJ4Z8Kaap+MooBqSo01/ubCdz6cZxuE5G2WY0bHYy4gEGsY/4r2Z5Z2IoydNW78hNHeISNgP8oemzsLV/tkJxb/cOplwtnRa3A5WrJQf1+wFrtu6s1vuG7iUVhk6It72DASTCncgAI8e2XM+Ut7AeYyZnPRs4nd1GJ9FVxZlG9V4c7pkFHEcvz9AYtoR5BOqn6TydEVnupDlr5E3P/uZVY8bE02Jt95M537/6VVoMY8iM5lR/F",
+        "host_dsa_public": "AAAAB3NzaC1kc3MAAACBAN4e5s9aKAOXVBdmCZq270V+LB3iwYCs+56jwPdJhnVqb76p+JH9YX7Xj2WYYX/aGdQo+p01nLSU4Odf2y88m5Yy39c6LvbLJC1IyoKHLCVEk8grqVuWkw5jtZZThJ03y9lbPPrulsjrYm81TC/JfXPwnOb7TO5D7gHuOBRZ4IQFAAAAFQCeZQHNssc8C1Q8mEZwzp8Dgi1gWQAAAIAiyhyNel1qoswTLuBQZyFohVD2jLp73ZogpmmmOadk4qyCRGTkga1SwwaUa2ylsoghwchuuGZttIkyMvHBBuY1+KM5KoMDWO84V2tB2+TqJlBC603hE6Ge2XsXBtJEQGYsfw3gJky6KGCuk9LVIiQNKzYyyOSWpkuJGQdMXYVUKgAAAIEA0rnVWbLl4YMtxNmE9lpYpfCjI1aGLxGSQY89medELALCRWCyBvVVRG6Gyn2aJObAos73334vhbyYqvJ/WiXAV+Tl0j0KFMiM/j2okszj2ozbz7FDK3sYZRd++pPQ/gBI2VJ+8InelPXHVMMJE7woDOPr1jCt77QBUUa9r+YUkfg=",
+        "host_ecdsa_public": "AAAAE2VjZHNhLXNoYTItbmlzdHAyNTYAAAAIbmlzdHAyNTYAAABBBFSJwPrxIr0WFOQ5U4F4GFQ//36/yZQ/co9g9TQxIA9Kp2pl4Q0lZI5isYVEX+Q4AonF7gs3pOp2TNXcLHMckgI=",
+        "host_ecdsa_type": "ecdsa-sha2-nistp256"
+      }
+    },
+    "chef_packages": {
+      "ohai": {
+        "version": "6.18.0",
+        "ohai_root": "/opt/chef/embedded/lib/ruby/gems/1.9.1/gems/ohai-6.18.0/lib/ohai"
+      },
+      "chef": {
+        "version": "11.6.0",
+        "chef_root": "/opt/chef/embedded/lib/ruby/gems/1.9.1/gems/chef-11.6.0/lib"
+      }
+    },
+    "hostname": "stage-logs-1a",
+    "fqdn": "stage-logs-1a",
+    "domain": null,
+    "network": {
+      "interfaces": {
+        "lo": {
+          "mtu": "16436",
+          "flags": [
+            "LOOPBACK",
+            "UP",
+            "LOWER_UP"
+          ],
+          "encapsulation": "Loopback",
+          "addresses": {
+            "127.0.0.1": {
+              "family": "inet",
+              "prefixlen": "8",
+              "netmask": "255.0.0.0",
+              "scope": "Node"
+            },
+            "::1": {
+              "family": "inet6",
+              "prefixlen": "128",
+              "scope": "Node"
+            }
+          },
+          "state": "unknown"
+        },
+        "eth0": {
+          "type": "eth",
+          "number": "0",
+          "mtu": "1500",
+          "flags": [
+            "BROADCAST",
+            "MULTICAST",
+            "UP",
+            "LOWER_UP"
+          ],
+          "encapsulation": "Ethernet",
+          "addresses": {
+            "0A:A3:72:5A:55:AC": {
+              "family": "lladdr"
+            },
+            "10.0.4.134": {
+              "family": "inet",
+              "prefixlen": "24",
+              "netmask": "255.255.255.0",
+              "broadcast": "10.0.4.255",
+              "scope": "Global"
+            },
+            "fe80::8a3:72ff:fe5a:55ac": {
+              "family": "inet6",
+              "prefixlen": "64",
+              "scope": "Link"
+            }
+          },
+          "state": "up",
+          "arp": {
+            "10.0.4.1": "0a:a3:72:7c:17:be",
+            "10.0.4.202": "0a:a3:72:59:ad:e4"
+          },
+          "routes": [
+            {
+              "destination": "default",
+              "family": "inet",
+              "via": "10.0.4.1",
+              "metric": "100"
+            },
+            {
+              "destination": "10.0.4.0/24",
+              "family": "inet",
+              "scope": "link",
+              "proto": "kernel",
+              "src": "10.0.4.134"
+            },
+            {
+              "destination": "fe80::/64",
+              "family": "inet6",
+              "metric": "256",
+              "proto": "kernel"
+            }
+          ]
+        }
+      },
+      "default_interface": "eth0",
+      "default_gateway": "10.0.4.1"
+    },
+    "counters": {
+      "network": {
+        "interfaces": {
+          "lo": {
+            "rx": {
+              "bytes": "2791847270",
+              "packets": "53411880",
+              "errors": "0",
+              "drop": "0",
+              "overrun": "0"
+            },
+            "tx": {
+              "bytes": "2791847270",
+              "packets": "53411880",
+              "errors": "0",
+              "drop": "0",
+              "carrier": "0",
+              "collisions": "0"
+            }
+          },
+          "eth0": {
+            "tx": {
+              "queuelen": "1000",
+              "bytes": "102732138",
+              "packets": "699417",
+              "errors": "0",
+              "drop": "0",
+              "carrier": "0",
+              "collisions": "0"
+            },
+            "rx": {
+              "bytes": "798381862",
+              "packets": "954137",
+              "errors": "0",
+              "drop": "0",
+              "overrun": "0"
+            }
+          }
+        }
+      }
+    },
+    "ipaddress": "10.0.4.134",
+    "macaddress": "0A:A3:72:5A:55:AC",
+    "ip6address": "fe80::8a3:72ff:fe5a:55ac",
+    "ec2": {
+      "ami_id": "ami-cf5e2ba6",
+      "ami_launch_index": "0",
+      "ami_manifest_path": "ubuntu-us-east-1/images/ubuntu-precise-12.04-amd64-server-20130603.manifest.xml",
+      "block_device_mapping_ami": "sda1",
+      "block_device_mapping_ephemeral0": "sdb",
+      "block_device_mapping_ephemeral1": "sdc",
+      "block_device_mapping_root": "/dev/sda1",
+      "hostname": "ip-10-0-4-134.priv.evertrue.com",
+      "instance_action": "none",
+      "instance_id": "i-0e93ea6d",
+      "instance_type": "m1.large",
+      "kernel_id": "aki-88aa75e1",
+      "local_hostname": "ip-10-0-4-134.priv.evertrue.com",
+      "local_ipv4": "10.0.4.134",
+      "mac": "0a:a3:72:5a:55:ac",
+      "metrics_vhostmd": "<?xml version=\"1.0\" encoding=\"UTF-8\"?>",
+      "network_interfaces_macs": {
+        "0a:a3:72:5a:55:ac": {
+          "device_number": "0",
+          "interface_id": "eni-f509619b",
+          "local_hostname": "ip-10-0-4-134.priv.evertrue.com",
+          "local_ipv4s": "10.0.4.134",
+          "mac": "0a:a3:72:5a:55:ac",
+          "owner_id": "037590317780",
+          "security_group_ids": "sg-0588536a",
+          "security_groups": "stage-logs",
+          "subnet_id": "subnet-2d2a6c42",
+          "subnet_ipv4_cidr_block": "10.0.4.0/24",
+          "vpc_id": "vpc-ca7dcfa1",
+          "vpc_ipv4_cidr_block": "10.0.0.0/16"
+        }
+      },
+      "placement_availability_zone": "us-east-1a",
+      "profile": "default-paravirtual",
+      "public_keys_0_openssh_key": "ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABAQCY2kUIxzAXnMyBW7vQV+h/aa08Zdt/gL+EuZD/QUDGbiAe4XmyZ6c+xOTKoE18zsKLUlInx6pp8QN5zffWMVk6AyS5kitfh2lRv3ZI/rq6bAFIH/hFobJay3wLDuwo7Bw3GWfnaAQVTSvbwn8Nz9issln4OlOxqg60s7qgfEm7NB3oPHuTI17vvAUMMwxqiWPl3ob81Cokyp22QlQ7kA62pGwIijiztSLClzoSwzczeS5eO3ua5+yyubP41XJNTloHpW/y3nqvvpRjE7GSZQXAvwy2bTfnIWC2IqdSVAaYyK25YTxIftMPopph8YfHkk0mtnXmCuMd844/bdvTg9cp aws_dev\n",
+      "reservation_id": "r-6a92fa05",
+      "security_groups": [
+        "stage-logs"
+      ],
+      "userdata": "#include\n\nhttp://s3.amazonaws.com/ops.evertrue.com/cloudinit/ec2_bootstrap_script.sh?AWSAccessKeyId=AKIAIE7SOZTTTPGMR7EQ&Expires=1376936142&Signature=G%2BjUzWAfovpLicAWpliWX8bcQjY%3D"
+    },
+    "cloud": {
+      "public_ips": [
+        null
+      ],
+      "private_ips": [
+        "10.0.4.134"
+      ],
+      "public_ipv4": null,
+      "public_hostname": null,
+      "local_ipv4": "10.0.4.134",
+      "local_hostname": "ip-10-0-4-134.priv.evertrue.com",
+      "provider": "ec2"
+    },
+    "ohai_time": 1377195714.769122,
+    "lsb": {
+      "id": "Ubuntu",
+      "release": "12.04",
+      "codename": "precise",
+      "description": "Ubuntu 12.04.2 LTS"
+    },
+    "platform": "ubuntu",
+    "platform_version": "12.04",
+    "platform_family": "debian",
+    "etc": {
+      "passwd": {
+        "root": {
+          "dir": "/root",
+          "gid": 0,
+          "uid": 0,
+          "shell": "/bin/bash",
+          "gecos": "root"
+        },
+        "daemon": {
+          "dir": "/usr/sbin",
+          "gid": 1,
+          "uid": 1,
+          "shell": "/bin/sh",
+          "gecos": "daemon"
+        },
+        "bin": {
+          "dir": "/bin",
+          "gid": 2,
+          "uid": 2,
+          "shell": "/bin/sh",
+          "gecos": "bin"
+        },
+        "sys": {
+          "dir": "/dev",
+          "gid": 3,
+          "uid": 3,
+          "shell": "/bin/sh",
+          "gecos": "sys"
+        },
+        "sync": {
+          "dir": "/bin",
+          "gid": 65534,
+          "uid": 4,
+          "shell": "/bin/sync",
+          "gecos": "sync"
+        },
+        "games": {
+          "dir": "/usr/games",
+          "gid": 60,
+          "uid": 5,
+          "shell": "/bin/sh",
+          "gecos": "games"
+        },
+        "man": {
+          "dir": "/var/cache/man",
+          "gid": 12,
+          "uid": 6,
+          "shell": "/bin/sh",
+          "gecos": "man"
+        },
+        "lp": {
+          "dir": "/var/spool/lpd",
+          "gid": 7,
+          "uid": 7,
+          "shell": "/bin/sh",
+          "gecos": "lp"
+        },
+        "mail": {
+          "dir": "/var/mail",
+          "gid": 8,
+          "uid": 8,
+          "shell": "/bin/sh",
+          "gecos": "mail"
+        },
+        "news": {
+          "dir": "/var/spool/news",
+          "gid": 9,
+          "uid": 9,
+          "shell": "/bin/sh",
+          "gecos": "news"
+        },
+        "uucp": {
+          "dir": "/var/spool/uucp",
+          "gid": 10,
+          "uid": 10,
+          "shell": "/bin/sh",
+          "gecos": "uucp"
+        },
+        "proxy": {
+          "dir": "/bin",
+          "gid": 13,
+          "uid": 13,
+          "shell": "/bin/sh",
+          "gecos": "proxy"
+        },
+        "www-data": {
+          "dir": "/var/www",
+          "gid": 33,
+          "uid": 33,
+          "shell": "/bin/sh",
+          "gecos": "www-data"
+        },
+        "backup": {
+          "dir": "/var/backups",
+          "gid": 34,
+          "uid": 34,
+          "shell": "/bin/sh",
+          "gecos": "backup"
+        },
+        "list": {
+          "dir": "/var/list",
+          "gid": 38,
+          "uid": 38,
+          "shell": "/bin/sh",
+          "gecos": "Mailing List Manager"
+        },
+        "irc": {
+          "dir": "/var/run/ircd",
+          "gid": 39,
+          "uid": 39,
+          "shell": "/bin/sh",
+          "gecos": "ircd"
+        },
+        "gnats": {
+          "dir": "/var/lib/gnats",
+          "gid": 41,
+          "uid": 41,
+          "shell": "/bin/sh",
+          "gecos": "Gnats Bug-Reporting System (admin)"
+        },
+        "nobody": {
+          "dir": "/nonexistent",
+          "gid": 65534,
+          "uid": 65534,
+          "shell": "/bin/sh",
+          "gecos": "nobody"
+        },
+        "libuuid": {
+          "dir": "/var/lib/libuuid",
+          "gid": 101,
+          "uid": 100,
+          "shell": "/bin/sh",
+          "gecos": ""
+        },
+        "syslog": {
+          "dir": "/home/syslog",
+          "gid": 103,
+          "uid": 101,
+          "shell": "/bin/false",
+          "gecos": ""
+        },
+        "messagebus": {
+          "dir": "/var/run/dbus",
+          "gid": 105,
+          "uid": 102,
+          "shell": "/bin/false",
+          "gecos": ""
+        },
+        "whoopsie": {
+          "dir": "/nonexistent",
+          "gid": 106,
+          "uid": 103,
+          "shell": "/bin/false",
+          "gecos": ""
+        },
+        "landscape": {
+          "dir": "/var/lib/landscape",
+          "gid": 109,
+          "uid": 104,
+          "shell": "/bin/false",
+          "gecos": ""
+        },
+        "sshd": {
+          "dir": "/var/run/sshd",
+          "gid": 65534,
+          "uid": 105,
+          "shell": "/usr/sbin/nologin",
+          "gecos": ""
+        },
+        "ubuntu": {
+          "dir": "/home/ubuntu",
+          "gid": 1000,
+          "uid": 1000,
+          "shell": "/bin/bash",
+          "gecos": "Ubuntu"
+        },
+        "postfix": {
+          "dir": "/var/spool/postfix",
+          "gid": 113,
+          "uid": 106,
+          "shell": "/bin/false",
+          "gecos": ""
+        },
+        "mark": {
+          "dir": "/home/mark",
+          "gid": 5003,
+          "uid": 5003,
+          "shell": "/bin/bash",
+          "gecos": "Mark Greene, set up by Chef"
+        },
+        "eherot": {
+          "dir": "/home/eherot",
+          "gid": 5004,
+          "uid": 5004,
+          "shell": "/bin/bash",
+          "gecos": "Eric Herot, set up by Chef"
+        },
+        "bob": {
+          "dir": "/home/bob",
+          "gid": 6007,
+          "uid": 6007,
+          "shell": "/bin/bash",
+          "gecos": "Bob Breznak, set up by Chef"
+        },
+        "eric": {
+          "dir": "/home/eric",
+          "gid": 5002,
+          "uid": 5002,
+          "shell": "/bin/bash",
+          "gecos": "Eric Carlstrom, set up by Chef"
+        },
+        "jeff": {
+          "dir": "/home/jeff",
+          "gid": 6006,
+          "uid": 6006,
+          "shell": "/bin/bash",
+          "gecos": "Jeff Byrnes, set up by Chef"
+        },
+        "andrew": {
+          "dir": "/home/andrew",
+          "gid": 6002,
+          "uid": 6002,
+          "shell": "/bin/bash",
+          "gecos": "Andrew Hammond, set up by Chef"
+        },
+        "deploy": {
+          "dir": "/home/deploy",
+          "gid": 1011,
+          "uid": 1011,
+          "shell": "/bin/bash",
+          "gecos": "Deploy worker, set up by Chef"
+        },
+        "worker": {
+          "dir": "/home/worker",
+          "gid": 1007,
+          "uid": 1007,
+          "shell": "/bin/bash",
+          "gecos": "Default worker, set up by Chef"
+        },
+        "drew": {
+          "dir": "/home/drew",
+          "gid": 6001,
+          "uid": 6001,
+          "shell": "/bin/bash",
+          "gecos": "Drew Burch, set up by Chef"
+        },
+        "hai": {
+          "dir": "/home/hai",
+          "gid": 6005,
+          "uid": 6005,
+          "shell": "/bin/bash",
+          "gecos": "Hai Zhou, set up by Chef"
+        },
+        "pgray": {
+          "dir": "/home/pgray",
+          "gid": 7002,
+          "uid": 7002,
+          "shell": "/bin/bash",
+          "gecos": "PJ Gray, set up by Chef"
+        },
+        "david": {
+          "dir": "/home/david",
+          "gid": 8006,
+          "uid": 8006,
+          "shell": "/bin/bash",
+          "gecos": "David Ohayon, set up by Chef"
+        },
+        "ntop": {
+          "dir": "/var/lib/ntop",
+          "gid": 116,
+          "uid": 107,
+          "shell": "/bin/false",
+          "gecos": ""
+        },
+        "newrelic": {
+          "dir": "/",
+          "gid": 117,
+          "uid": 108,
+          "shell": "/bin/false",
+          "gecos": ""
+        },
+        "ntp": {
+          "dir": "/home/ntp",
+          "gid": 118,
+          "uid": 109,
+          "shell": "/bin/false",
+          "gecos": ""
+        },
+        "redis": {
+          "dir": "/home/redis",
+          "gid": 8008,
+          "uid": 8007,
+          "shell": "/bin/sh",
+          "gecos": ""
+        },
+        "elasticsearch": {
+          "dir": "/usr/local/elasticsearch",
+          "gid": 8009,
+          "uid": 8008,
+          "shell": "/bin/bash",
+          "gecos": "ElasticSearch User"
+        },
+        "logstash": {
+          "dir": "/var/lib/logstash",
+          "gid": 999,
+          "uid": 998,
+          "shell": "/bin/sh",
+          "gecos": ""
+        },
+        "revealcloud": {
+          "dir": "/home/revealcloud",
+          "gid": 8010,
+          "uid": 999,
+          "shell": "/bin/sh",
+          "gecos": ""
+        }
+      },
+      "group": {
+        "root": {
+          "gid": 0,
+          "members": [
+
+          ]
+        },
+        "daemon": {
+          "gid": 1,
+          "members": [
+
+          ]
+        },
+        "bin": {
+          "gid": 2,
+          "members": [
+
+          ]
+        },
+        "sys": {
+          "gid": 3,
+          "members": [
+
+          ]
+        },
+        "adm": {
+          "gid": 4,
+          "members": [
+            "ubuntu"
+          ]
+        },
+        "tty": {
+          "gid": 5,
+          "members": [
+
+          ]
+        },
+        "disk": {
+          "gid": 6,
+          "members": [
+
+          ]
+        },
+        "lp": {
+          "gid": 7,
+          "members": [
+
+          ]
+        },
+        "mail": {
+          "gid": 8,
+          "members": [
+
+          ]
+        },
+        "news": {
+          "gid": 9,
+          "members": [
+
+          ]
+        },
+        "uucp": {
+          "gid": 10,
+          "members": [
+
+          ]
+        },
+        "man": {
+          "gid": 12,
+          "members": [
+
+          ]
+        },
+        "proxy": {
+          "gid": 13,
+          "members": [
+
+          ]
+        },
+        "kmem": {
+          "gid": 15,
+          "members": [
+
+          ]
+        },
+        "dialout": {
+          "gid": 20,
+          "members": [
+            "ubuntu"
+          ]
+        },
+        "fax": {
+          "gid": 21,
+          "members": [
+
+          ]
+        },
+        "voice": {
+          "gid": 22,
+          "members": [
+
+          ]
+        },
+        "cdrom": {
+          "gid": 24,
+          "members": [
+            "ubuntu"
+          ]
+        },
+        "floppy": {
+          "gid": 25,
+          "members": [
+            "ubuntu"
+          ]
+        },
+        "tape": {
+          "gid": 26,
+          "members": [
+
+          ]
+        },
+        "sudo": {
+          "gid": 27,
+          "members": [
+
+          ]
+        },
+        "audio": {
+          "gid": 29,
+          "members": [
+            "ubuntu"
+          ]
+        },
+        "dip": {
+          "gid": 30,
+          "members": [
+            "ubuntu"
+          ]
+        },
+        "www-data": {
+          "gid": 33,
+          "members": [
+
+          ]
+        },
+        "backup": {
+          "gid": 34,
+          "members": [
+
+          ]
+        },
+        "operator": {
+          "gid": 37,
+          "members": [
+
+          ]
+        },
+        "list": {
+          "gid": 38,
+          "members": [
+
+          ]
+        },
+        "irc": {
+          "gid": 39,
+          "members": [
+
+          ]
+        },
+        "src": {
+          "gid": 40,
+          "members": [
+
+          ]
+        },
+        "gnats": {
+          "gid": 41,
+          "members": [
+
+          ]
+        },
+        "shadow": {
+          "gid": 42,
+          "members": [
+
+          ]
+        },
+        "utmp": {
+          "gid": 43,
+          "members": [
+
+          ]
+        },
+        "video": {
+          "gid": 44,
+          "members": [
+            "ubuntu"
+          ]
+        },
+        "sasl": {
+          "gid": 45,
+          "members": [
+
+          ]
+        },
+        "plugdev": {
+          "gid": 46,
+          "members": [
+            "ubuntu"
+          ]
+        },
+        "staff": {
+          "gid": 50,
+          "members": [
+
+          ]
+        },
+        "games": {
+          "gid": 60,
+          "members": [
+
+          ]
+        },
+        "users": {
+          "gid": 100,
+          "members": [
+
+          ]
+        },
+        "nogroup": {
+          "gid": 65534,
+          "members": [
+
+          ]
+        },
+        "libuuid": {
+          "gid": 101,
+          "members": [
+
+          ]
+        },
+        "crontab": {
+          "gid": 102,
+          "members": [
+
+          ]
+        },
+        "syslog": {
+          "gid": 103,
+          "members": [
+
+          ]
+        },
+        "fuse": {
+          "gid": 104,
+          "members": [
+
+          ]
+        },
+        "messagebus": {
+          "gid": 105,
+          "members": [
+
+          ]
+        },
+        "whoopsie": {
+          "gid": 106,
+          "members": [
+
+          ]
+        },
+        "mlocate": {
+          "gid": 107,
+          "members": [
+
+          ]
+        },
+        "ssh": {
+          "gid": 108,
+          "members": [
+
+          ]
+        },
+        "landscape": {
+          "gid": 109,
+          "members": [
+
+          ]
+        },
+        "netdev": {
+          "gid": 110,
+          "members": [
+            "ubuntu"
+          ]
+        },
+        "admin": {
+          "gid": 111,
+          "members": [
+            "ubuntu"
+          ]
+        },
+        "ubuntu": {
+          "gid": 1000,
+          "members": [
+
+          ]
+        },
+        "ssl-cert": {
+          "gid": 112,
+          "members": [
+
+          ]
+        },
+        "postfix": {
+          "gid": 113,
+          "members": [
+
+          ]
+        },
+        "postdrop": {
+          "gid": 114,
+          "members": [
+
+          ]
+        },
+        "mark": {
+          "gid": 5003,
+          "members": [
+
+          ]
+        },
+        "eherot": {
+          "gid": 5004,
+          "members": [
+
+          ]
+        },
+        "bob": {
+          "gid": 6007,
+          "members": [
+
+          ]
+        },
+        "eric": {
+          "gid": 5002,
+          "members": [
+
+          ]
+        },
+        "jeff": {
+          "gid": 6006,
+          "members": [
+
+          ]
+        },
+        "andrew": {
+          "gid": 6002,
+          "members": [
+
+          ]
+        },
+        "sysadmin": {
+          "gid": 2300,
+          "members": [
+            "mark",
+            "eherot",
+            "bob",
+            "eric",
+            "jeff",
+            "andrew"
+          ]
+        },
+        "deploy": {
+          "gid": 1011,
+          "members": [
+
+          ]
+        },
+        "worker": {
+          "gid": 1007,
+          "members": [
+
+          ]
+        },
+        "drew": {
+          "gid": 6001,
+          "members": [
+
+          ]
+        },
+        "hai": {
+          "gid": 6005,
+          "members": [
+
+          ]
+        },
+        "pgray": {
+          "gid": 7002,
+          "members": [
+
+          ]
+        },
+        "david": {
+          "gid": 8006,
+          "members": [
+
+          ]
+        },
+        "evertrue": {
+          "gid": 2004,
+          "members": [
+            "deploy",
+            "worker",
+            "drew",
+            "bob",
+            "jeff",
+            "hai",
+            "mark",
+            "eherot",
+            "eric",
+            "pgray",
+            "andrew",
+            "david"
+          ]
+        },
+        "jwhois": {
+          "gid": 115,
+          "members": [
+
+          ]
+        },
+        "ntop": {
+          "gid": 116,
+          "members": [
+
+          ]
+        },
+        "newrelic": {
+          "gid": 117,
+          "members": [
+
+          ]
+        },
+        "ntp": {
+          "gid": 118,
+          "members": [
+
+          ]
+        },
+        "redis": {
+          "gid": 8008,
+          "members": [
+
+          ]
+        },
+        "elasticsearch": {
+          "gid": 8009,
+          "members": [
+
+          ]
+        },
+        "logstash": {
+          "gid": 999,
+          "members": [
+
+          ]
+        },
+        "revealcloud": {
+          "gid": 8010,
+          "members": [
+
+          ]
+        }
+      }
+    },
+    "current_user": "root",
+    "root_group": "root",
+    "command": {
+      "ps": "ps -ef"
+    },
+    "dmi": {
+      "dmidecode_version": "2.11"
+    },
+    "virtualization": {
+      "system": "xen",
+      "role": "guest"
+    },
+    "filesystem": {
+      "/dev/xvda1": {
+        "kb_size": "10321208",
+        "kb_used": "3005180",
+        "kb_available": "6791752",
+        "percent_used": "31%",
+        "mount": "/",
+        "fs_type": "ext4",
+        "mount_options": [
+          "rw"
+        ],
+        "uuid": "21813bed-571e-4fcc-905d-32bc13641493",
+        "label": "cloudimg-rootfs"
+      },
+      "udev": {
+        "kb_size": "3806628",
+        "kb_used": "12",
+        "kb_available": "3806616",
+        "percent_used": "1%",
+        "mount": "/dev",
+        "fs_type": "devtmpfs",
+        "mount_options": [
+          "rw",
+          "mode=0755"
+        ]
+      },
+      "tmpfs": {
+        "kb_size": "1525896",
+        "kb_used": "192",
+        "kb_available": "1525704",
+        "percent_used": "1%",
+        "mount": "/run",
+        "fs_type": "tmpfs",
+        "mount_options": [
+          "rw",
+          "noexec",
+          "nosuid",
+          "size=10%",
+          "mode=0755"
+        ]
+      },
+      "none": {
+        "kb_size": "3814736",
+        "kb_used": "0",
+        "kb_available": "3814736",
+        "percent_used": "0%",
+        "mount": "/run/shm",
+        "fs_type": "tmpfs",
+        "mount_options": [
+          "rw",
+          "nosuid",
+          "nodev"
+        ]
+      },
+      "/dev/xvdb": {
+        "kb_size": "433455904",
+        "kb_used": "203012",
+        "kb_available": "411234588",
+        "percent_used": "1%",
+        "mount": "/mnt",
+        "fs_type": "ext3",
+        "mount_options": [
+          "rw",
+          "_netdev"
+        ],
+        "uuid": "e40dfcf3-53ae-4f84-b471-5804eb0b6e5f"
+      },
+      "proc": {
+        "mount": "/proc",
+        "fs_type": "proc",
+        "mount_options": [
+          "rw",
+          "noexec",
+          "nosuid",
+          "nodev"
+        ]
+      },
+      "sysfs": {
+        "mount": "/sys",
+        "fs_type": "sysfs",
+        "mount_options": [
+          "rw",
+          "noexec",
+          "nosuid",
+          "nodev"
+        ]
+      },
+      "devpts": {
+        "mount": "/dev/pts",
+        "fs_type": "devpts",
+        "mount_options": [
+          "rw",
+          "noexec",
+          "nosuid",
+          "gid=5",
+          "mode=0620"
+        ]
+      },
+      "/dev/xvdc": {
+        "fs_type": "ext3",
+        "uuid": "e40dfcf3-53ae-4f84-b471-5804eb0b6e5f"
+      },
+      "rootfs": {
+        "mount": "/",
+        "fs_type": "rootfs",
+        "mount_options": [
+          "rw"
+        ]
+      },
+      "/dev/disk/by-label/cloudimg-rootfs": {
+        "mount": "/",
+        "fs_type": "ext4",
+        "mount_options": [
+          "rw",
+          "relatime",
+          "user_xattr",
+          "barrier=1",
+          "data=ordered"
+        ]
+      }
+    },
+    "memory": {
+      "swap": {
+        "cached": "0kB",
+        "total": "0kB",
+        "free": "0kB"
+      },
+      "total": "7629472kB",
+      "free": "4114912kB",
+      "buffers": "92440kB",
+      "cached": "2480796kB",
+      "active": "1946684kB",
+      "inactive": "1284796kB",
+      "dirty": "168kB",
+      "writeback": "0kB",
+      "anon_pages": "658120kB",
+      "mapped": "24788kB",
+      "slab": "186288kB",
+      "slab_reclaimable": "175184kB",
+      "slab_unreclaim": "11104kB",
+      "page_tables": "4460kB",
+      "nfs_unstable": "0kB",
+      "bounce": "0kB",
+      "commit_limit": "3814736kB",
+      "committed_as": "1539020kB",
+      "vmalloc_total": "34359738367kB",
+      "vmalloc_used": "26116kB",
+      "vmalloc_chunk": "34359710188kB"
+    },
+    "cpu": {
+      "0": {
+        "vendor_id": "GenuineIntel",
+        "family": "6",
+        "model": "26",
+        "model_name": "Intel(R) Xeon(R) CPU           E5507  @ 2.27GHz",
+        "stepping": "5",
+        "mhz": "2266.746",
+        "cache_size": "4096 KB",
+        "physical_id": "0",
+        "core_id": "0",
+        "cores": "1",
+        "flags": [
+          "fpu",
+          "de",
+          "tsc",
+          "msr",
+          "pae",
+          "cx8",
+          "sep",
+          "cmov",
+          "pat",
+          "clflush",
+          "mmx",
+          "fxsr",
+          "sse",
+          "sse2",
+          "ss",
+          "ht",
+          "syscall",
+          "nx",
+          "lm",
+          "constant_tsc",
+          "rep_good",
+          "nopl",
+          "nonstop_tsc",
+          "pni",
+          "ssse3",
+          "cx16",
+          "sse4_1",
+          "sse4_2",
+          "popcnt",
+          "hypervisor",
+          "lahf_lm"
+        ]
+      },
+      "1": {
+        "vendor_id": "GenuineIntel",
+        "family": "6",
+        "model": "26",
+        "model_name": "Intel(R) Xeon(R) CPU           E5507  @ 2.27GHz",
+        "stepping": "5",
+        "mhz": "2266.746",
+        "cache_size": "4096 KB",
+        "physical_id": "0",
+        "core_id": "0",
+        "cores": "1",
+        "flags": [
+          "fpu",
+          "de",
+          "tsc",
+          "msr",
+          "pae",
+          "cx8",
+          "sep",
+          "cmov",
+          "pat",
+          "clflush",
+          "mmx",
+          "fxsr",
+          "sse",
+          "sse2",
+          "ss",
+          "ht",
+          "syscall",
+          "nx",
+          "lm",
+          "constant_tsc",
+          "rep_good",
+          "nopl",
+          "nonstop_tsc",
+          "pni",
+          "ssse3",
+          "cx16",
+          "sse4_1",
+          "sse4_2",
+          "popcnt",
+          "hypervisor",
+          "lahf_lm"
+        ]
+      },
+      "total": 2,
+      "real": 1
+    },
+    "block_device": {
+      "ram0": {
+        "size": "131072",
+        "removable": "0"
+      },
+      "ram1": {
+        "size": "131072",
+        "removable": "0"
+      },
+      "ram2": {
+        "size": "131072",
+        "removable": "0"
+      },
+      "ram3": {
+        "size": "131072",
+        "removable": "0"
+      },
+      "ram4": {
+        "size": "131072",
+        "removable": "0"
+      },
+      "ram5": {
+        "size": "131072",
+        "removable": "0"
+      },
+      "ram6": {
+        "size": "131072",
+        "removable": "0"
+      },
+      "ram7": {
+        "size": "131072",
+        "removable": "0"
+      },
+      "ram8": {
+        "size": "131072",
+        "removable": "0"
+      },
+      "ram9": {
+        "size": "131072",
+        "removable": "0"
+      },
+      "ram10": {
+        "size": "131072",
+        "removable": "0"
+      },
+      "ram11": {
+        "size": "131072",
+        "removable": "0"
+      },
+      "ram12": {
+        "size": "131072",
+        "removable": "0"
+      },
+      "ram13": {
+        "size": "131072",
+        "removable": "0"
+      },
+      "ram14": {
+        "size": "131072",
+        "removable": "0"
+      },
+      "ram15": {
+        "size": "131072",
+        "removable": "0"
+      },
+      "loop0": {
+        "size": "0",
+        "removable": "0"
+      },
+      "loop1": {
+        "size": "0",
+        "removable": "0"
+      },
+      "loop2": {
+        "size": "0",
+        "removable": "0"
+      },
+      "loop3": {
+        "size": "0",
+        "removable": "0"
+      },
+      "loop4": {
+        "size": "0",
+        "removable": "0"
+      },
+      "loop5": {
+        "size": "0",
+        "removable": "0"
+      },
+      "loop6": {
+        "size": "0",
+        "removable": "0"
+      },
+      "loop7": {
+        "size": "0",
+        "removable": "0"
+      },
+      "xvda1": {
+        "size": "20971520",
+        "removable": "0"
+      },
+      "xvdb": {
+        "size": "880732160",
+        "removable": "0"
+      },
+      "xvdc": {
+        "size": "880732160",
+        "removable": "0"
+      }
+    },
+    "uptime_seconds": 259841,
+    "uptime": "3 days 00 hours 10 minutes 41 seconds",
+    "idletime_seconds": 1011420,
+    "idletime": "11 days 16 hours 57 minutes 00 seconds",
+    "recipes": [
+      "et_base",
+      "logserver"
+    ],
+    "roles": [
+
+    ],
+    "nginx": {
+      "version": null,
+      "configure_arguments": [
+
+      ],
+      "prefix": null,
+      "conf_path": null
+    }
+  }
+}

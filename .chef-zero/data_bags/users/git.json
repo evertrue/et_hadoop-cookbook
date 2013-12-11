@@ -1,0 +1,8 @@
+{
+  "id": "git",
+  "groups": [ "evertrue" ],
+  "uid": 1009,
+  "shell": "\/bin\/bash",
+  "comment": "Git worker, set up by Chef",
+  "action": "remove"
+}

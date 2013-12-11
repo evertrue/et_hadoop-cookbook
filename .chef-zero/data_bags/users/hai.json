@@ -1,0 +1,10 @@
+{
+  "id": "hai",
+  "ssh_keys": "ssh-rsa AAAAB3NzaC1yc2EAAAABIwAAAQEAkS/d6ioR6J5hQ01NnubgnC9Wm00G0KN3W1SiD56Ab2/MXlCGqrh/1tjtxGEq83ag2A3Qr/NQwu+cEcYKZ5QROylsQf3mcMZzy9mk5k7TVAO9sEKV798B5wZGGCEYd0g8Nrb9NYIWhhmjciE0iPYRodf/zmnTDm6ab4SMrNMWZs4QsxcbSKYkaeeYaFgSbIoxhWkLZRkmsPkUi4507kPXW3EgFDWBlNCEWBaO96zmCTa4zTjrjikcaHrNohhEFv0OuGK+mHx5LL/ZbHsCC8YEvnnfm3XWZoE3PIzCXnzBVqD9L9o5d5WZOR5vBBBW6gXcNpYZ7LHXD7ciLr2gG2s7HQ== hai.zhou@evertrue.com",
+  "groups": [
+    "evertrue"
+  ],
+  "uid": 6005,
+  "shell": "\/bin\/bash",
+  "comment": "Hai Zhou, set up by Chef"
+}

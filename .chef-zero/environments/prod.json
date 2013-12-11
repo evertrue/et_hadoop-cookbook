@@ -1,0 +1,166 @@
+{
+  "name": "prod",
+  "description": "The production environment",
+  "json_class": "Chef::Environment",
+  "chef_type": "environment",
+  "default_attributes": {
+  },
+  "override_attributes": {
+    "chef_env_long_name": "production",
+    "api_haproxy": {
+      "acls": {
+        "host_api": {
+          "type": "hdr_beg(host)",
+          "match": "api.evertrue.com"
+        },
+        "uri_contacts": {
+          "type": "path_beg",
+          "match": "/contacts"
+        },
+        "uri_reds": {
+          "type": "path_beg",
+          "match": "/reds"
+        },
+        "uri_auth": {
+          "type": "path_beg",
+          "match": "/auth"
+        },
+        "uri_reporting": {
+          "type": "path_beg",
+          "match": "/reporting"
+        },
+        "uri_10": {
+          "type": "path_beg",
+          "match": "/1.0"
+        },
+        "uri_01": {
+          "type": "path_beg",
+          "match": "/0.1"
+        }
+      },
+      "frontends": {
+        "main": {
+          "port": "8080",
+          "ssl": false
+        },
+        "main_ssl": {
+          "port": "8443",
+          "ssl": true
+        }
+      },
+      "applications": {
+        "contactsapi-prod": {
+          "acls": [
+            [
+              "host_api",
+              "uri_contacts"
+            ]
+          ],
+          "endpoint": "contactsapi.evertrue.com",
+          "ssl_enabled": true,
+          "ssl_required": true,
+          "backend": "contactsapi-prod"
+        },
+        "authapi-prod": {
+          "acls": [
+            [
+              "host_api",
+              "uri_auth"
+            ]
+          ],
+          "endpoint": "auth.evertrue.com",
+          "ssl_enabled": true,
+          "ssl_required": true,
+          "backend": "authapi-prod"
+        },
+        "redsapi-prod": {
+          "acls": [
+            [
+              "host_api",
+              "uri_reds"
+            ]
+          ],
+          "endpoint": "redsapi.evertrue.com",
+          "ssl_enabled": true,
+          "ssl_required": true,
+          "backend": "redsapi-prod"
+        },
+        "reportingapi-prod": {
+          "acls": [
+            [
+              "host_api",
+              "uri_reporting"
+            ]
+          ],
+          "endpoint": "reporting.evertrue.com",
+          "ssl_enabled": true,
+          "ssl_required": true,
+          "backend": "reportingapi-prod"
+        },
+        "legacyapi-prod": {
+          "acls": [
+            [
+              "host_api",
+              "uri_10"
+            ],
+            [
+              "host_api",
+              "uri_01"
+            ]
+          ],
+          "ssl_enabled": true,
+          "ssl_required": true,
+          "backend": "legacyapi-prod"
+        }
+      },
+      "backends": {
+        "contactsapi-prod": {
+          "balance_algorithm": "roundrobin",
+          "check_req": {
+            "method": "OPTIONS",
+            "url": "/contacts/"
+          },
+          "port": "8080",
+          "servers_recipe": "et_contacts_api"
+        },
+        "authapi-prod": {
+          "balance_algorithm": "roundrobin",
+          "check_req": {
+            "always": true
+          },
+          "port": "8080",
+          "servers_recipe": "et_auth_api"
+        },
+        "redsapi-prod": {
+          "balance_algorithm": "roundrobin",
+          "check_req": {
+            "always": true
+          },
+          "port": "8080",
+          "servers_recipe": "et_reds_api"
+        },
+        "reportingapi-prod": {
+          "balance_algorithm": "roundrobin",
+          "check_req": {
+            "always": true
+          },
+          "port": "8080",
+          "servers_recipe": "et_reporting_api"
+        },
+        "legacyapi-prod": {
+          "balance_algorithm": "roundrobin",
+          "check_req": {
+            "always": true
+          },
+          "servers": [
+            {
+              "name": "prod-api-1",
+              "fqdn": "10.0.113.215",
+              "port": "8080"
+            }
+          ]
+        }
+      }
+    }
+  }
+}

@@ -1,0 +1,10 @@
+{
+  "id": "drew",
+  "ssh_keys": "ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABAQDw7Yrqcdt40fWNsdN4P33Ep2a9IkEKSevksedBe/oQEthaS+V7xYLdgB7N7vK8qjNm7sPZEQOXKMV1+dleeoTd/o5wFrBtjAeS25MVJqzmROa8a8ML0MQJ0lAY0kWsGwxieH1O0k3KmOucl5O9u0S0fEvI/bXgh3QwO8KFYiDp9nTf/e1M6uoIhf2pNCOfpRg7TEdlRCn4tKdZtK9SW+3EeNnGmZOb9d3KHOBDdUVWI9z3r/X3GE37wYC/yyotouvyCiv9qfy2C4zSLPjmCJiq9m90S1CFQ4OTDJ59GfkKZMu6CXORo0xcsqF03dhfSMScJepOYqYYFVI/venUkFED drew@evertrue.com",
+  "groups": [
+    "evertrue"
+  ],
+  "uid": 6001,
+  "shell": "\/bin\/bash",
+  "comment": "Drew Burch, set up by Chef"
+}
