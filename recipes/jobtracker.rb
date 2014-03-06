@@ -1,1 +1,1 @@
-include_recipe "hadoop::jobtracker"
+include_recipe 'hadoop::jobtracker'

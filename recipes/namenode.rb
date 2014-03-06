@@ -1,1 +1,1 @@
-include_recipe "hadoop::namenode"
+include_recipe 'hadoop::namenode'
