@@ -1,8 +1,0 @@
-{
-  "id": "core",
-  "groups": [ "evertrue" ],
-  "uid": 1004,
-  "shell": "\/bin\/bash",
-  "comment": "Core worker, set up by Chef",
-  "action": "remove"
-}

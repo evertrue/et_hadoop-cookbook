@@ -1,7 +1,0 @@
-{
-  "id": "worker",
-  "groups": [ "evertrue" ],
-  "uid": 1007,
-  "shell": "\/bin\/bash",
-  "comment": "Default worker, set up by Chef"
-}

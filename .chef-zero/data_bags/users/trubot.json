@@ -1,8 +1,0 @@
-{
-  "id": "trubot",
-  "groups": [ "evertrue" ],
-  "uid": 1008,
-  "shell": "\/bin\/bash",
-  "comment": "Trubot worker, set up by Chef",
-  "action": "remove"
-}

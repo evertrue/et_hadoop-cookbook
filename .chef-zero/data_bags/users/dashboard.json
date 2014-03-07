@@ -1,8 +1,0 @@
-{
-  "id": "dashboard",
-  "groups": [ "evertrue" ],
-  "uid": 1003,
-  "shell": "\/bin\/bash",
-  "comment": "Dashboard worker, set up by Chef",
-  "action": "remove"
-}
