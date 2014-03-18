@@ -1,3 +1,7 @@
+## 1.1.1
+
+* Bump hadoop v1.2.2
+
 ## 1.1.0
 
 * Bump hadoop v1.2.1
