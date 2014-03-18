@@ -15,8 +15,6 @@ platforms:
     customize:
       cpus: 4
       memory: 1536
-    box: opscode-ubuntu-12.04
-    box_url: https://opscode-vm-bento.s3.amazonaws.com/vagrant/opscode_ubuntu-12.04_provisionerless.box
 
 suites:
 - name: default
