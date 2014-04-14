@@ -1,3 +1,8 @@
+## 1.1.3
+
+* Bump hadoop v1.2.4
+* [PLATFORM-394](https://evertroops.atlassian.net/browse/PLATFORM-394) - Add jdk.xml.entityExpansionLimit option to HADOOP_OPTS
+
 ## 1.1.2
 
 * Bump hadoop v1.2.3
