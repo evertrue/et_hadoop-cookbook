@@ -22,4 +22,3 @@ suites:
     'role[namenode]',
     'role[jobtracker]'
   ]
-  data_bags_path: ../../server-chef/data_bags
