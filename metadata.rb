@@ -4,6 +4,7 @@ maintainer_email 'eric.herot@evertrue.com'
 license          'All rights reserved'
 description      'Installs/Configures et_hadoop'
 long_description IO.read(File.join(File.dirname(__FILE__), 'README.md'))
-version          '1.1.6'
+version          '2.0.0'
 
-depends 'hadoop', '= 1.2.7'
+depends 'hadoop', '= 2.0.0'
+depends 'storage', '= 2.0.0'

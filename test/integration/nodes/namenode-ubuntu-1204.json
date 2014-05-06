@@ -1,0 +1,35 @@
+{
+  "name": "namenode-ubuntu-1204",
+  "chef_environment": "dev",
+  "run_list": [
+    "recipe[et_base]",
+    "recipe[et_hadoop::namenode]",
+    "recipe[et_hadoop::jobtracker]",
+    "role[namenode]",
+    "role[jobtracker]"
+  ],
+  "override": {
+    "hadoop": {
+      "cluster-name": "default"
+    }
+  },
+  "automatic": {
+    "hostname": "namenode-ubuntu-1204",
+    "fqdn": "namenode-ubuntu-1204.priv.evertrue.com",
+    "domain": "priv.evertrue.com",
+    "ipaddress": "192.168.33.10",
+    "recipes": [
+      "et_base",
+      "et_hadoop::namenode",
+      "et_hadoop::jobtracker",
+      "hadoop::namenode",
+      "hadoop::repo",
+      "hadoop::default",
+      "hadoop::jobtracker"
+    ],
+    "roles": [
+      "namenode",
+      "jobtracker"
+    ]
+  }
+}

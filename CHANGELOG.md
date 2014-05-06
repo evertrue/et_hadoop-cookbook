@@ -1,3 +1,9 @@
+## 2.0.0
+
+* Cleaned up the layout of the test harness
+* Attach two volumes to each vagrant instance and build a test harness (including namenode/datanode cluster) to test it.
+* Bump hadoop to v2.0.0 to support multiple data storage directories
+
 ## 1.1.6
 
 * Bump hadoop v1.2.7
