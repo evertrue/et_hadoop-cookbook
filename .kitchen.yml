@@ -2,6 +2,8 @@
 driver:
   name: vagrant
   require_chef_omnibus: true
+  encrypted_data_bag_secret_key_path: <%= ENV['HOME'] %>/.chef/encrypted_data_bag_secret
+
 provisioner:
   name: chef_zero
 
@@ -21,4 +23,3 @@ suites:
     'role[jobtracker]'
   ]
   data_bags_path: ../../server-chef/data_bags
-  encrypted_data_bag_secret_key_path: <%= ENV['HOME'] %>/.chef/encrypted_data_bag_secret
