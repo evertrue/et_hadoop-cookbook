@@ -4,10 +4,6 @@ driver_config:
   require_chef_omnibus: true
 provisioner:
   name: chef_zero
-  environments_path: '.chef-zero/environments'
-  nodes_path: '.chef-zero/nodes'
-  data_bags_path: '.chef-zero/data_bags'
-  roles_path: '.chef-zero/roles'
 
 platforms:
 - name: ubuntu-12.04
