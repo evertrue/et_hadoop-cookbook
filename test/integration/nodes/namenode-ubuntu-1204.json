@@ -15,7 +15,7 @@
   },
   "automatic": {
     "hostname": "namenode-ubuntu-1204",
-    "fqdn": "namenode-ubuntu-1204.priv.evertrue.com",
+    "fqdn": "namenode-ubuntu-1204.vagrantup.com",
     "domain": "priv.evertrue.com",
     "ipaddress": "192.168.33.10",
     "recipes": [

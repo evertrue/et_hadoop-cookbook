@@ -31,14 +31,15 @@ suites:
         namenode: namenode-ubuntu-1204.priv.evertrue.com
     et_hostname:
       addl_hosts_entries:
-        - '192.168.33.11 dev-hadoop-dn-1b.priv.evertrue.com dev-hadoop-dn-1b'
-        - '192.168.33.10 namenode-ubuntu-1204.priv.evertrue.com namenode-ubuntu-1204'
+        - '192.168.33.11 dev-hadoop-dn-1b.vagrantup.com dev-hadoop-dn-1b'
+        - '192.168.33.10 namenode-ubuntu-1204.vagrantup.com namenode-ubuntu-1204'
   run_list: [
     'recipe[apt]',
     'recipe[et_hostname]',
     'recipe[et_networking_basic]',
-    'recipe[et_hadoop::namenode]',
+    'recipe[et_tools]',
     'recipe[et_hadoop::jobtracker]',
+    'recipe[et_hadoop::namenode]',
     'role[namenode]',
     'role[jobtracker]'
   ]
@@ -49,8 +50,8 @@ suites:
   attributes:
     et_hostname:
       addl_hosts_entries:
-        - '192.168.33.10 namenode-ubuntu-1204.priv.evertrue.com namenode-ubuntu-1204'
-        - '192.168.33.11 datanode-ubuntu-1204.priv.evertrue.com datanode-ubuntu-1204'
+        - '192.168.33.10 namenode-ubuntu-1204.vagrantup.com namenode-ubuntu-1204'
+        - '192.168.33.11 datanode-ubuntu-1204.vagrantup.com datanode-ubuntu-1204'
   run_list: [
     'recipe[apt]',
     'recipe[et_hostname]',

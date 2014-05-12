@@ -48,7 +48,7 @@ describe 'Hadoop Config' do
       should contain('/mnt/dev0/tmp/hadoop-${user.name},' \
         '/mnt/dev1/tmp/hadoop-${user.name}</value>')
     end
-    it { should contain('hdfs://namenode-ubuntu-1204.priv.evertrue.com/</value>') }
+    it { should contain('hdfs://namenode-ubuntu-1204.vagrantup.com/</value>') }
   end
 
   describe file('/etc/hadoop/conf.live/hdfs-site.xml') do
@@ -60,6 +60,6 @@ describe 'Hadoop Config' do
       should contain('/mnt/dev0/data/mapred/local,' \
         '/mnt/dev1/data/mapred/local')
     end
-    it { should contain('namenode-ubuntu-1204.priv.evertrue.com:8021') }
+    it { should contain('namenode-ubuntu-1204.vagrantup.com:8021') }
   end
 end
