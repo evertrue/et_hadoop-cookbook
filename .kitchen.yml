@@ -25,37 +25,50 @@ suites:
     - [ 'private_network', {ip: '192.168.33.10'}]
   attributes:
     hadoop:
-      core-site:
-        fs.defaultFS: 'hdfs://namenode-ubuntu-1204.priv.evertrue.com/'
+      force_format: true
+      cluster_name: main
+      yarn_site:
+        yarn.resourcemanager.scheduler.address: 0.0.0.0
+        yarn.resourcemanager.resource-tracker.address: 0.0.0.0
+        yarn.resourcemanager.admin.address: 0.0.0.0
+        yarn.resourcemanager.webapp.address: 0.0.0.0
+        yarn.resourcemanager.address: 0.0.0.0
+      core_site:
+        fs.defaultFS: 'hdfs://0.0.0.0/'
       hosts:
         namenode: namenode-ubuntu-1204.priv.evertrue.com
     et_hostname:
       addl_hosts_entries:
-        - '192.168.33.11 dev-hadoop-dn-1b.vagrantup.com dev-hadoop-dn-1b'
+        - '192.168.33.11 datanode-ubuntu-1204.vagrantup.com datanode-ubuntu-1204'
         - '192.168.33.10 namenode-ubuntu-1204.vagrantup.com namenode-ubuntu-1204'
   run_list: [
-    'recipe[apt]',
     'recipe[et_hostname]',
-    'recipe[et_networking_basic]',
+    'recipe[apt]',
     'recipe[et_tools]',
-    'recipe[et_hadoop::jobtracker]',
+    'recipe[et_networking_basic]',
     'recipe[et_hadoop::namenode]',
-    'role[namenode]',
-    'role[jobtracker]'
+    'recipe[hadoop::hadoop_yarn_resourcemanager]'
   ]
 - name: datanode
   driver_config:
     network:
     - [ 'private_network', {ip: '192.168.33.11'}]
   attributes:
+    hadoop:
+      yarn_site:
+        yarn.nodemanager.localizer.address: 0.0.0.0
+        yarn.nodemanager.webapp.address: 0.0.0.0
+        yarn.nodemanager.address: 0.0.0.0
+      cluster_name: main
     et_hostname:
       addl_hosts_entries:
         - '192.168.33.10 namenode-ubuntu-1204.vagrantup.com namenode-ubuntu-1204'
         - '192.168.33.11 datanode-ubuntu-1204.vagrantup.com datanode-ubuntu-1204'
   run_list: [
-    'recipe[apt]',
     'recipe[et_hostname]',
-    'recipe[et_networking_basic]',
+    'recipe[apt]',
     'recipe[et_tools]',
-    'recipe[et_hadoop::datanode]'
+    'recipe[et_networking_basic]',
+    'recipe[et_hadoop::datanode]',
+    'recipe[hadoop::hadoop_yarn_nodemanager]'
   ]

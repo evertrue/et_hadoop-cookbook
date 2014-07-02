@@ -18,7 +18,7 @@ end
 describe 'Hadoop Services' do
   %w(
     hadoop-hdfs-datanode
-    hadoop-0.20-mapreduce-tasktracker
+    hadoop-yarn-nodemanager
   ).each do |svc|
     describe service(svc) do
       it { should be_enabled }
@@ -29,7 +29,6 @@ describe 'Hadoop Services' do
   [
     50_010,
     50_020,
-    50_060,
     50_075
   ].each do |test_port|
     describe port(test_port) do
@@ -37,29 +36,25 @@ describe 'Hadoop Services' do
     end
   end
 
-  describe command('curl http://localhost:50060/tasktracker.jsp') do
-    it { should return_stdout(/Task Tracker Status/) }
+  context command('curl -s http://localhost:50075/dataNodeHome.jsp') do
+    it { should return_stdout(/(active)/) }
   end
 end
 
 describe 'Hadoop Config' do
-  describe file('/etc/hadoop/conf.live/core-site.xml') do
+  describe file('/etc/hadoop/conf.chef/core-site.xml') do
     it do
-      should contain('/mnt/dev0/tmp/hadoop-${user.name},' \
-        '/mnt/dev1/tmp/hadoop-${user.name}</value>')
+      should contain('file:///mnt/dev0/tmp/hadoop-${user}')
     end
     it { should contain('hdfs://namenode-ubuntu-1204.vagrantup.com/</value>') }
   end
 
-  describe file('/etc/hadoop/conf.live/hdfs-site.xml') do
-    it { should contain('/mnt/dev0/data/dfs/dn,/mnt/dev1/data/dfs/dn') }
+  describe file('/etc/hadoop/conf.chef/hdfs-site.xml') do
+    it { should contain('file:///mnt/dev0/data/hadoop-hdfs/data,' \
+      'file:///mnt/dev1/data/hadoop-hdfs/data') }
   end
 
-  describe file('/etc/hadoop/conf.live/mapred-site.xml') do
-    it do
-      should contain('/mnt/dev0/data/mapred/local,' \
-        '/mnt/dev1/data/mapred/local')
-    end
-    it { should contain('namenode-ubuntu-1204.vagrantup.com:8021') }
+  describe file('/etc/hadoop/conf.chef/yarn-site.xml') do
+    it { should contain('namenode-ubuntu-1204.vagrantup.com') }
   end
 end
