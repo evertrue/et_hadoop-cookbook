@@ -34,8 +34,16 @@ suites:
 - name: namenode
   attributes:
     hadoop:
-      core-site:
-        fs.defaultFS: 'hdfs://namenode-ubuntu-1204.priv.evertrue.com/'
+      force_format: true
+      cluster_name: main
+      yarn_site:
+        yarn.resourcemanager.scheduler.address: 0.0.0.0
+        yarn.resourcemanager.resource-tracker.address: 0.0.0.0
+        yarn.resourcemanager.admin.address: 0.0.0.0
+        yarn.resourcemanager.webapp.address: 0.0.0.0
+        yarn.resourcemanager.address: 0.0.0.0
+      core_site:
+        fs.defaultFS: 'hdfs://0.0.0.0/'
       hosts:
         namenode: namenode-ubuntu-1204.priv.evertrue.com
     et_hostname:
@@ -47,13 +55,17 @@ suites:
     'recipe[apt]',
     'recipe[et_tools]',
     'recipe[et_networking_basic]',
-    'recipe[et_hadoop::jobtracker]',
     'recipe[et_hadoop::namenode]',
-    'role[namenode]',
-    'role[jobtracker]'
+    'recipe[hadoop::hadoop_yarn_resourcemanager]'
   ]
 - name: datanode
   attributes:
+    hadoop:
+      yarn_site:
+        yarn.nodemanager.localizer.address: 0.0.0.0
+        yarn.nodemanager.webapp.address: 0.0.0.0
+        yarn.nodemanager.address: 0.0.0.0
+      cluster_name: main
     et_hostname:
       addl_hosts_entries: 
         - '10.140.167.9 namenode-ubuntu-1204.vagrantup.com namenode-ubuntu-1204'
@@ -63,5 +75,6 @@ suites:
     'recipe[apt]',
     'recipe[et_tools]',
     'recipe[et_networking_basic]',
-    'recipe[et_hadoop::datanode]'
+    'recipe[et_hadoop::datanode]',
+    'recipe[hadoop::hadoop_yarn_nodemanager]'
   ]
