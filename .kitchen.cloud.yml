@@ -1,0 +1,70 @@
+---
+driver:
+  name: ec2
+  require_chef_omnibus: true
+  aws_access_key_id: <%= ENV['AWS_ACCESS_KEY_ID'] %>
+  aws_secret_access_key: <%= ENV['AWS_SECRET_ACCESS_KEY'] %>
+  aws_ssh_key_id: <%= ENV['AWS_KEYPAIR_NAME'] %>
+  ssh_key: <%= ENV['EC2_SSH_KEY_PATH'] %>
+  region: us-east-1
+  availability_zone: us-east-1b
+  security_group_ids: ['ci-testing']
+  username: ubuntu
+  flavor_id: c3.large
+  interface: public
+
+provisioner:
+  name: chef_zero
+  encrypted_data_bag_secret_key_path: <%= ENV['HOME'] %>/encrypted_data_bag_secret
+  client_rb:
+    environment: dev
+
+platforms:
+- name: ubuntu-12.04
+  driver_config:
+    customize:
+      cpus: 4
+      memory: 1536
+      addl_volumes: 2
+
+suites:
+- name: namenode
+  driver_config:
+    network:
+    - [ 'private_network', {ip: '192.168.33.10'}]
+  attributes:
+    hadoop:
+      core-site:
+        fs.defaultFS: 'hdfs://namenode-ubuntu-1204.priv.evertrue.com/'
+      hosts:
+        namenode: namenode-ubuntu-1204.priv.evertrue.com
+    et_hostname:
+      addl_hosts_entries:
+        - '192.168.33.11 dev-hadoop-dn-1b.vagrantup.com dev-hadoop-dn-1b'
+        - '192.168.33.10 namenode-ubuntu-1204.vagrantup.com namenode-ubuntu-1204'
+  run_list: [
+    'recipe[et_hostname]',
+    'recipe[apt]',
+    'recipe[et_tools]',
+    'recipe[et_networking_basic]',
+    'recipe[et_hadoop::jobtracker]',
+    'recipe[et_hadoop::namenode]',
+    'role[namenode]',
+    'role[jobtracker]'
+  ]
+- name: datanode
+  driver_config:
+    network:
+    - [ 'private_network', {ip: '192.168.33.11'}]
+  attributes:
+    et_hostname:
+      addl_hosts_entries:
+        - '192.168.33.10 namenode-ubuntu-1204.vagrantup.com namenode-ubuntu-1204'
+        - '192.168.33.11 datanode-ubuntu-1204.vagrantup.com datanode-ubuntu-1204'
+  run_list: [
+    'recipe[et_hostname]',
+    'recipe[apt]',
+    'recipe[et_tools]',
+    'recipe[et_networking_basic]',
+    'recipe[et_hadoop::datanode]'
+  ]
