@@ -40,8 +40,8 @@ suites:
         namenode: namenode-ubuntu-1204.priv.evertrue.com
     et_hostname:
       addl_hosts_entries:
-        - '192.168.33.11 dev-hadoop-dn-1b.vagrantup.com dev-hadoop-dn-1b'
-        - '192.168.33.10 namenode-ubuntu-1204.vagrantup.com namenode-ubuntu-1204'
+        - '10.140.167.9 namenode-ubuntu-1204.vagrantup.com namenode-ubuntu-1204'
+        - '10.231.6.185 datanode-ubuntu-1204.vagrantup.com datanode-ubuntu-1204'
   run_list: [
     'recipe[et_hostname]',
     'recipe[apt]',
@@ -55,9 +55,9 @@ suites:
 - name: datanode
   attributes:
     et_hostname:
-      addl_hosts_entries:
-        - '192.168.33.10 namenode-ubuntu-1204.vagrantup.com namenode-ubuntu-1204'
-        - '192.168.33.11 datanode-ubuntu-1204.vagrantup.com datanode-ubuntu-1204'
+      addl_hosts_entries: 
+        - '10.140.167.9 namenode-ubuntu-1204.vagrantup.com namenode-ubuntu-1204'
+        - '10.231.6.185 datanode-ubuntu-1204.vagrantup.com datanode-ubuntu-1204'
   run_list: [
     'recipe[et_hostname]',
     'recipe[apt]',
