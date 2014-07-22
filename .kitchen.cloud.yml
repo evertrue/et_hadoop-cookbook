@@ -32,9 +32,6 @@ platforms:
 
 suites:
 - name: namenode
-  driver_config:
-    network:
-    - [ 'private_network', {ip: '192.168.33.10'}]
   attributes:
     hadoop:
       core-site:
@@ -56,9 +53,6 @@ suites:
     'role[jobtracker]'
   ]
 - name: datanode
-  driver_config:
-    network:
-    - [ 'private_network', {ip: '192.168.33.11'}]
   attributes:
     et_hostname:
       addl_hosts_entries:
