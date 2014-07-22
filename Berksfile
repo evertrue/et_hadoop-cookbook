@@ -3,6 +3,9 @@ source 'https://api.berkshelf.com'
 
 metadata
 
+cookbook 'hadoop',
+         path: '../hadoop'
+
 group :integration do
   cookbook 'et_tools'
   cookbook 'storage',
