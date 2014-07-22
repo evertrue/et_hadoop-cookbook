@@ -22,6 +22,9 @@ provisioner:
 platforms:
 - name: ubuntu-12.04
   driver_config:
+    tags:
+      Name: vagrant-et-hadoop-1204
+      Env: public
     customize:
       cpus: 4
       memory: 1536
