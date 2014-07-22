@@ -1,3 +1,8 @@
+## 2.0.1
+
+* Only grab hadoop cookbook from the path when doing integration testing
+* Bump hadoop v2.0.1
+
 ## 2.0.0
 
 * Cleaned up the layout of the test harness
