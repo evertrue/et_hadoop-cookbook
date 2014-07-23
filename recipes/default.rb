@@ -9,6 +9,8 @@
 include_recipe 'storage'
 
 if node['storage'] && node['storage']['ephemeral_mounts']
-  node.override['hadoop']['data_root'] = node['storage']['ephemeral_mounts'].map { |em| "#{em}/data" }
-  node.override['hadoop']['tmp_root'] = node['storage']['ephemeral_mounts'].map { |em| "#{em}/tmp" }
+  node.override['hadoop']['data_root'] =
+    node['storage']['ephemeral_mounts'].map { |em| "#{em}/data" }
+  node.override['hadoop']['tmp_root'] =
+    node['storage']['ephemeral_mounts'].map { |em| "#{em}/tmp" }
 end
