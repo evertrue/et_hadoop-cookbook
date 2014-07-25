@@ -1,3 +1,7 @@
+## 2.1.0
+
+* Add PAM management cookbook
+
 ## 2.0.1
 
 * Only grab hadoop cookbook from the path when doing integration testing
