@@ -6,6 +6,8 @@
 #
 # All rights reserved - Do Not Redistribute
 #
+
+include_recipe 'pam'
 include_recipe 'storage'
 
 if node['storage'] && node['storage']['ephemeral_mounts']
