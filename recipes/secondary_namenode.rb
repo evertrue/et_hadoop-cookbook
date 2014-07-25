@@ -1,2 +1,2 @@
 include_recipe 'et_hadoop::default'
-include_recipe 'hadoop::secondary_namenode'
+include_recipe 'continuuity_hadoop::secondary_namenode'

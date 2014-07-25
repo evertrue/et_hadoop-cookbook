@@ -3,8 +3,9 @@ source 'https://api.berkshelf.com'
 
 metadata
 
-cookbook 'hadoop',
-         github: 'continuuity/hadoop_cookbook'
+cookbook 'continuuity_hadoop',
+         github: 'evertrue/hadoop_cookbook',
+         tag: 'eherot/give_cookbook_unique_name'
 
 group :integration do
   cookbook 'et_tools'

@@ -1,2 +1,2 @@
 include_recipe 'et_hadoop::default'
-include_recipe 'hadoop::jobtracker'
+include_recipe 'continuuity_hadoop::jobtracker'

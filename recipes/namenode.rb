@@ -1,5 +1,5 @@
 include_recipe 'et_hadoop::default'
-include_recipe 'hadoop::hadoop_hdfs_namenode'
+include_recipe 'continuuity_hadoop::hadoop_hdfs_namenode'
 include_recipe 'et_hadoop::overrides'
 
 ### TODO: due to a bug in the underlying hadoop cookbook where hadoop.tmp.dir can contain '${user}',

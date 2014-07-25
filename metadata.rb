@@ -8,5 +8,5 @@ version          '2.0.1'
 
 depends 'java'
 depends 'apt'
-depends 'hadoop', '= 1.1.1'
+depends 'continuuity_hadoop', '= 1.1.1'
 depends 'storage', '= 2.1.3'

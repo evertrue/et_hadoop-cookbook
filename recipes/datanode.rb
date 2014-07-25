@@ -4,5 +4,5 @@ node.set['hadoop']['yarn_site']['yarn.resourcemanager.hostname'] =
     "chef_environment:#{node.chef_environment}").first['fqdn']
 
 include_recipe 'et_hadoop::default'
-include_recipe 'hadoop::hadoop_hdfs_datanode'
+include_recipe 'continuuity_hadoop::hadoop_hdfs_datanode'
 include_recipe 'et_hadoop::overrides'
