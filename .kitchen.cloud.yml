@@ -34,8 +34,6 @@ suites:
 - name: namenode
   attributes:
     hadoop:
-      core-site:
-        fs.defaultFS: 'hdfs://namenode-ubuntu-1204.priv.evertrue.com/'
       hosts:
         namenode: namenode-ubuntu-1204.priv.evertrue.com
     et_hostname:
