@@ -1,3 +1,7 @@
+## 2.1.2
+
+* Bump storage version v2.1.4
+
 ## 2.1.1
 
 * Bump hadoop v2.0.2
