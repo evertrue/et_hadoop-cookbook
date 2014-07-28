@@ -1,3 +1,7 @@
+## 2.1.1
+
+* Bump hadoop v2.0.2
+
 ## 2.1.0
 
 * Add PAM management cookbook
