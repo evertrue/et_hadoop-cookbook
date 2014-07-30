@@ -1,3 +1,7 @@
+## 2.1.4
+
+* Use one storage array for tmp instead of two
+
 ## 2.1.3
 
 * Switch to URL-style path for data_root
