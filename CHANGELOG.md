@@ -1,3 +1,7 @@
+## 2.1.5
+
+* Bump hadoop v2.0.3
+
 ## 2.1.4
 
 * Use one storage array for tmp instead of two
