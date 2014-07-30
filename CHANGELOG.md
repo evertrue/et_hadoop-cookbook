@@ -1,3 +1,8 @@
+## 2.1.3
+
+* Switch to URL-style path for data_root
+* Bump storage version v2.1.5
+
 ## 2.1.2
 
 * Bump storage version v2.1.4
