@@ -1,3 +1,9 @@
+## 2.1.6
+
+* Remove extra slash from file URL
+* Relax version constrant for storage to allow use of new version (2.1.6) -- now requiring aws credentials data bag
+* Bump hadoop to v2.0.4
+
 ## 2.1.5
 
 * Bump hadoop v2.0.3
