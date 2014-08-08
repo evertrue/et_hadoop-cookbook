@@ -3,12 +3,12 @@ driver:
   name: vagrant
   vagrantfile_erb: test/integration/Vagrantfile.erb
   require_chef_omnibus: true
-  encrypted_data_bag_secret_key_path: <%= ENV['HOME'] %>/.chef/encrypted_data_bag_secret
 
 provisioner:
   name: chef_zero
   client_rb:
     environment: dev
+  encrypted_data_bag_secret_key_path: <%= ENV['HOME'] %>/.chef/encrypted_data_bag_secret
 
 platforms:
 - name: ubuntu-12.04
