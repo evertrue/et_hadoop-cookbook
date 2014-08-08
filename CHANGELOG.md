@@ -1,3 +1,10 @@
+## 2.2.0
+
+* Bump storage v2.1.7
+* Move encrypted_data_bag_secret_key_path to a place where it actually gets called
+* Bump image_id to ami-b66ca0de (in .kitchen.cloud.yml)
+* Bump hadoop to v2.1.0
+
 ## 2.1.6
 
 * Remove extra slash from file URL
