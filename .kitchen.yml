@@ -34,8 +34,6 @@ suites:
         yarn.resourcemanager.address: 0.0.0.0
       core_site:
         fs.defaultFS: 'hdfs://0.0.0.0/'
-      hosts:
-        namenode: namenode-ubuntu-1204.priv.evertrue.com
     et_hostname:
       addl_hosts_entries:
         - '192.168.33.11 datanode-ubuntu-1204.vagrantup.com datanode-ubuntu-1204'
