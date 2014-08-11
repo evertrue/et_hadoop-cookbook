@@ -44,7 +44,7 @@ suites:
     'recipe[et_tools]',
     'recipe[et_networking_basic]',
     'recipe[et_hadoop::namenode]',
-    'recipe[hadoop::hadoop_yarn_resourcemanager]'
+    'recipe[continuuity_hadoop::hadoop_yarn_resourcemanager]'
   ]
 - name: datanode
   driver_config:
@@ -67,5 +67,5 @@ suites:
     'recipe[et_tools]',
     'recipe[et_networking_basic]',
     'recipe[et_hadoop::datanode]',
-    'recipe[hadoop::hadoop_yarn_nodemanager]'
+    'recipe[continuuity_hadoop::hadoop_yarn_nodemanager]'
   ]
