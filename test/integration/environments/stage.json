@@ -1,5 +1,5 @@
 {
-  "name": "dev",
+  "name": "stage",
   "description": "The development environment",
   "cookbook_versions": {
   },
@@ -8,6 +8,6 @@
   "default_attributes": {
   },
   "override_attributes": {
-    "chef_env_long_name": "development"
+    "chef_env_long_name": "staging"
   }
 }

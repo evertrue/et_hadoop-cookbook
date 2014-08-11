@@ -1,6 +1,6 @@
 {
   "name": "namenode-ubuntu-1204",
-  "chef_environment": "dev",
+  "chef_environment": "stage",
   "run_list": [
     "recipe[et_base]",
     "recipe[et_hadoop::namenode]"
