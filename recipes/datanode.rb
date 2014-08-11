@@ -6,3 +6,6 @@ node.set['hadoop']['yarn_site']['yarn.resourcemanager.hostname'] =
 include_recipe 'et_hadoop::default'
 include_recipe 'continuuity_hadoop::hadoop_hdfs_datanode'
 include_recipe 'et_hadoop::overrides'
+
+resources(service: 'hadoop-hdfs-datanode').run_action(:enable)
+resources(service: 'hadoop-hdfs-datanode').run_action(:start)

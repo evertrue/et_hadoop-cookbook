@@ -9,6 +9,7 @@ marker_file = "#{Chef::Config[:file_cache_path]}/hadoop_wrapper.nnformatted"
 ruby_block 'initaction-format-namenode' do
   block do
     resources(execute: 'hdfs-namenode-format').run_action(:run)
+    resources(service: 'hadoop-hdfs-namenode').run_action(:start)
     resources(execute: 'hdfs-tmpdir').run_action(:run)
     File.open(marker_file, 'w') {}
   end
@@ -17,3 +18,5 @@ ruby_block 'initaction-format-namenode' do
   # only_if { (Dir.entries("#{node['hadoop']['hdfs_site']['dfs.name.dir'].split(',').first}") -
   #  %w{ . .. }).empty? }
 end
+
+resources(service: 'hadoop-hdfs-namenode').run_action(:enable)
