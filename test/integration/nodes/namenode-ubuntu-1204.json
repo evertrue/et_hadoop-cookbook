@@ -18,10 +18,7 @@
     "recipes": [
       "et_base",
       "et_hadoop::namenode",
-      "hadoop::hadoop_hdfs_namenode",
-      "hadoop::repo",
-      "hadoop::default",
-      "hadoop::hadoop_yarn_resourcemanager"
+      "continuuity_hadoop::hadoop_yarn_resourcemanager"
     ]
   }
 }
