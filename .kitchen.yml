@@ -22,22 +22,7 @@ suites:
   driver_config:
     network:
     - [ 'private_network', {ip: '192.168.33.10'}]
-  attributes:
-    hadoop:
-      force_format: true
-      cluster_name: main
-      yarn_site:
-        yarn.resourcemanager.scheduler.address: 0.0.0.0
-        yarn.resourcemanager.resource-tracker.address: 0.0.0.0
-        yarn.resourcemanager.admin.address: 0.0.0.0
-        yarn.resourcemanager.webapp.address: 0.0.0.0
-        yarn.resourcemanager.address: 0.0.0.0
-      core_site:
-        fs.defaultFS: 'hdfs://0.0.0.0/'
-    et_hostname:
-      addl_hosts_entries:
-        - '192.168.33.11 datanode-ubuntu-1204.vagrantup.com datanode-ubuntu-1204'
-        - '192.168.33.10 namenode-ubuntu-1204.vagrantup.com namenode-ubuntu-1204'
+  attributes: {}
   run_list: [
     'recipe[et_hostname]',
     'recipe[apt]',
