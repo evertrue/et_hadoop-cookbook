@@ -35,17 +35,7 @@ suites:
   driver_config:
     network:
     - [ 'private_network', {ip: '192.168.33.11'}]
-  attributes:
-    hadoop:
-      yarn_site:
-        yarn.nodemanager.localizer.address: 0.0.0.0
-        yarn.nodemanager.webapp.address: 0.0.0.0
-        yarn.nodemanager.address: 0.0.0.0
-      cluster_name: main
-    et_hostname:
-      addl_hosts_entries:
-        - '192.168.33.10 namenode-ubuntu-1204.vagrantup.com namenode-ubuntu-1204'
-        - '192.168.33.11 datanode-ubuntu-1204.vagrantup.com datanode-ubuntu-1204'
+  attributes: {}
   run_list: [
     'recipe[et_hostname]',
     'recipe[apt]',
