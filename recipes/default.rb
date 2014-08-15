@@ -21,20 +21,6 @@ if node['storage'] && node['storage']['ephemeral_mounts']
     node['storage']['ephemeral_mounts'].map { |em| "file://#{em}/data/hadoop-hdfs/data" }.join(',')
 end
 
-unless node.recipes.include? 'et_hadoop::namenode'
-  if Chef::Config[:solo]
-    fail 'Chef Solo not supported.  This recipe requires search.'
-  else
-    namenode = search(
-      :node,
-      "chef_environment:#{node.chef_environment} AND " \
-      'recipes:et_hadoop\:\:namenode AND ' \
-      "hadoop_cluster_name:#{node['hadoop']['cluster_name']}"
-    ).first
-  end
-  node.set['hadoop']['core_site']['fs.defaultFS'] = "hdfs://#{namenode['fqdn']}/"
-end
-
 # Old cookbook:
 #
 # if node['storage'] && node['storage']['ephemeral_mounts']
