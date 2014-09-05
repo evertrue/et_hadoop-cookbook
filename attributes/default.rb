@@ -11,3 +11,5 @@ set['pam_d']['services']['su']['main'] = {
 
 set['hadoop']['mapred-site']['mapred.tasktracker.map.tasks.maximum'] =
   node['cpu']['total']
+set['hadoop']['mapred-site']['mapred.tasktracker.reducer.tasks.maximum'] =
+  node['cpu']['total']
