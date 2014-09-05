@@ -1,3 +1,7 @@
+## 2.2.4
+
+* s/reducer/reduce/
+
 ## 2.2.3
 
 * Set property mapred.tasktracker.reducer.tasks.maximum
