@@ -1,3 +1,7 @@
+## 2.2.2
+
+* Rename mapred.map.tasks config property to mapred.tasktracker.map.tasks.maximum
+
 ## 2.2.1
 
 * Set mapred.map.tasks to # CPUs
