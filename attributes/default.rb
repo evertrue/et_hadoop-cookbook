@@ -8,3 +8,5 @@ set['pam_d']['services']['su']['main'] = {
     'name' => 'pam_limits.so'
   }
 }
+
+set['hadoop']['mapred-site']['mapred.map.tasks'] = node['cpu']['total'] * 2
