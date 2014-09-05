@@ -1,3 +1,7 @@
+## 2.2.3
+
+* Set property mapred.tasktracker.reducer.tasks.maximum
+
 ## 2.2.2
 
 * Rename mapred.map.tasks config property to mapred.tasktracker.map.tasks.maximum
