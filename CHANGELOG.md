@@ -1,3 +1,7 @@
+## 2.2.1
+
+* Set mapred.map.tasks to 2xCPUs
+
 ## 2.2.0
 
 * Bump storage v2.1.7
