@@ -1,6 +1,6 @@
 ## 2.2.1
 
-* Set mapred.map.tasks to 2xCPUs
+* Set mapred.map.tasks to # CPUs
 
 ## 2.2.0
 
