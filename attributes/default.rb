@@ -9,4 +9,4 @@ set['pam_d']['services']['su']['main'] = {
   }
 }
 
-set['hadoop']['mapred-site']['mapred.map.tasks'] = node['cpu']['total'] * 2
+set['hadoop']['mapred-site']['mapred.map.tasks'] = node['cpu']['total']
