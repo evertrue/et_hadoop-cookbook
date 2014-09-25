@@ -13,3 +13,5 @@ set['hadoop']['mapred-site']['mapred.tasktracker.map.tasks.maximum'] =
   node['cpu']['total']
 set['hadoop']['mapred-site']['mapred.tasktracker.reduce.tasks.maximum'] =
   node['cpu']['total']
+set['hadoop']['mapred-site']['mapred.child.java.opts'] =
+  '-Xmx1024M'
