@@ -1,3 +1,7 @@
+## 2.2.5
+
+* Increase data node heap size
+
 ## 2.2.4
 
 * s/reducer/reduce/
