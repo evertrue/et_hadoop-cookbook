@@ -1,3 +1,7 @@
+## 2.2.6
+
+* Fix Berksfile to use released versions of `storage` and `hadoop` cookbooks
+
 ## 2.2.5
 
 * Increase data node heap size
