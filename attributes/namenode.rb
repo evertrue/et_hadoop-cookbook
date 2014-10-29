@@ -11,3 +11,5 @@ set['hadoop']['yarn_site'] = {
   'yarn.resourcemanager.webapp.address' => '0.0.0.0',
   'yarn.resourcemanager.address' => '0.0.0.0'
 }
+
+default['hadoop']['deploy_user'] = 'deploy'

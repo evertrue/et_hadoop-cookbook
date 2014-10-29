@@ -19,3 +19,14 @@ ruby_block 'initaction-format-namenode' do
   # only_if { (Dir.entries("#{node['hadoop']['hdfs_site']['dfs.name.dir'].split(',').first}") -
   #  %w{ . .. }).empty? }
 end
+
+# The deploy user must be allowed to copy files as mapred
+# However, sudoers is damned hard, so we allow all actions as mapred
+node.set['authorization']['sudo']['include_sudoers_d'] = true
+
+sudo 'hadoop' do
+  user node['hadoop']['deploy_user']
+  runas 'mapred'
+  nopasswd true
+  commands ['ALL']
+end

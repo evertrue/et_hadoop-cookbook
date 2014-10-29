@@ -45,3 +45,13 @@ describe 'HDFS' do
     its(:stdout) { should match(/20\d{2}-\d{2}-\d{2} \d{2}:\d{2}:\d{2}/) }
   end
 end
+
+describe 'Hadoop Job Sudo Config' do
+  describe file '/etc/sudoers.d/hadoop' do
+    it { should be_file }
+    its(:content) { should include 'deploy' }
+    its(:content) { should include 'mapred' }
+    its(:content) { should include 'NOPASSWD' }
+    its(:content) { should include 'ALL' }
+  end
+end
