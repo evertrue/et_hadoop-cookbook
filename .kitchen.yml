@@ -12,8 +12,7 @@ provisioner:
   name: chef_zero
   client_rb:
     environment: dev
-  encrypted_data_bag_secret_key_path: <%= ENV['HOME'] %>/.chef/encrypted_data_bag_secret
-
+  encrypted_data_bag_secret_key_path: "<%= ENV['HOME'] %>/.chef/encrypted_data_bag_secret"
 platforms:
 - name: ubuntu-12.04
 
@@ -21,7 +20,8 @@ suites:
 - name: namenode
   driver_config:
     network:
-    - [ 'private_network', {ip: '192.168.33.10'}]
+    - - private_network
+      - ip: 192.168.33.10
   attributes:
     hadoop:
       core-site:
@@ -32,29 +32,28 @@ suites:
       addl_hosts_entries:
         - '192.168.33.11 dev-hadoop-dn-1b.vagrantup.com dev-hadoop-dn-1b'
         - '192.168.33.10 namenode-ubuntu-1204.vagrantup.com namenode-ubuntu-1204'
-  run_list: [
-    'recipe[apt]',
-    'recipe[et_hostname]',
-    'recipe[et_networking_basic]',
-    'recipe[et_tools]',
-    'recipe[et_hadoop::jobtracker]',
-    'recipe[et_hadoop::namenode]',
-    'role[namenode]',
-    'role[jobtracker]'
-  ]
+  run_list:
+    - recipe[apt]
+    - recipe[et_hostname]
+    - recipe[et_networking_basic]
+    - recipe[et_tools]
+    - recipe[et_hadoop::jobtracker]
+    - recipe[et_hadoop::namenode]
+    - role[namenode]
+    - role[jobtracker]
 - name: datanode
   driver_config:
     network:
-    - [ 'private_network', {ip: '192.168.33.11'}]
+    - - private_network
+      - ip: 192.168.33.11
   attributes:
     et_hostname:
       addl_hosts_entries:
         - '192.168.33.10 namenode-ubuntu-1204.vagrantup.com namenode-ubuntu-1204'
         - '192.168.33.11 datanode-ubuntu-1204.vagrantup.com datanode-ubuntu-1204'
-  run_list: [
-    'recipe[apt]',
-    'recipe[et_hostname]',
-    'recipe[et_networking_basic]',
-    'recipe[et_tools]',
-    'recipe[et_hadoop::datanode]'
-  ]
+  run_list:
+    - recipe[apt]
+    - recipe[et_hostname]
+    - recipe[et_networking_basic]
+    - recipe[et_tools]
+    - recipe[et_hadoop::datanode]
