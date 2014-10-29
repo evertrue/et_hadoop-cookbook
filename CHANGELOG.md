@@ -1,3 +1,8 @@
+## 2.3.0
+
+* Add sudoer rule for `deploy` user for deploying Hadoop jobs via Capistrano
+* Clean up Test Kitchen config
+
 ## 2.2.6
 
 * Fix Berksfile to use released versions of `storage` and `hadoop` cookbooks
