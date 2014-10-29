@@ -25,12 +25,12 @@ describe 'Hadoop Services' do
   end
 
   describe command('curl -s http://localhost:50070/dfshealth.jsp') do
-    it { should return_stdout(/Hadoop NameNode&nbsp;0.0.0.0:8020/) }
+    its(:stdout) { should match(/Hadoop NameNode&nbsp;0.0.0.0:8020/) }
   end
 
   describe command('curl ' \
     'http://localhost:50070/jmx?qry=Hadoop:service=NameNode,name=NameNodeInfo') do
-    it { should return_stdout(/\\"adminState\\":\\"In Service\\"/) }
+    its(:stdout) { should match(/\\"adminState\\":\\"In Service\\"/) }
   end
 end
 
@@ -42,6 +42,6 @@ describe 'HDFS' do
     # This (the output of hdfs dfs -stat) is actually a date string.
     # it should only show up if the file (which is created by our recipe)
     # actually exists.
-    it { should return_stdout(/20\d{2}-\d{2}-\d{2} \d{2}:\d{2}:\d{2}/) }
+    its(:stdout) { should match(/20\d{2}-\d{2}-\d{2} \d{2}:\d{2}:\d{2}/) }
   end
 end

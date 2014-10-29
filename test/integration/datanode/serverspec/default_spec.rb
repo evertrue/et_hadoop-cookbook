@@ -37,7 +37,7 @@ describe 'Hadoop Services' do
   end
 
   context command('curl -s http://localhost:50075/dataNodeHome.jsp') do
-    it { should return_stdout(/(active)/) }
+    its(:stdout) { should match(/(active)/) }
   end
 end
 
