@@ -44,22 +44,23 @@ end
 
 describe 'Hadoop Config' do
   describe file('/etc/hadoop/conf.live/core-site.xml') do
-    it do
-      should contain('/mnt/dev0/tmp/hadoop-${user.name},' \
+    its(:content) do
+      should include('/mnt/dev0/tmp/hadoop-${user.name},' \
         '/mnt/dev1/tmp/hadoop-${user.name}</value>')
     end
-    it { should contain('hdfs://namenode-ubuntu-1204.vagrantup.com/</value>') }
+    its(:content) { should include('hdfs://namenode-ubuntu-1204.vagrantup.com/</value>') }
   end
 
   describe file('/etc/hadoop/conf.live/hdfs-site.xml') do
-    it { should contain('/mnt/dev0/data/dfs/dn,/mnt/dev1/data/dfs/dn') }
+    its(:content) { should include('/mnt/dev0/data/dfs/dn') }
+    its(:content) { should include('/mnt/dev1/data/dfs/dn') }
   end
 
   describe file('/etc/hadoop/conf.live/mapred-site.xml') do
-    it do
-      should contain('/mnt/dev0/data/mapred/local,' \
+    its(:content) do
+      should include('/mnt/dev0/data/mapred/local,' \
         '/mnt/dev1/data/mapred/local')
     end
-    it { should contain('namenode-ubuntu-1204.vagrantup.com:8021') }
+    its(:content) { should include('namenode-ubuntu-1204.vagrantup.com:8021') }
   end
 end
