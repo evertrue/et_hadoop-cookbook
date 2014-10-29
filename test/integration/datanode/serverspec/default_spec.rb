@@ -38,7 +38,7 @@ describe 'Hadoop Services' do
   end
 
   describe command('curl http://localhost:50060/tasktracker.jsp') do
-    it { should return_stdout(/Task Tracker Status/) }
+    its(:stdout) { should match(/Task Tracker Status/) }
   end
 end
 
