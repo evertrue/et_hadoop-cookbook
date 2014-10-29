@@ -23,7 +23,7 @@ describe 'Hadoop Services' do
   end
 
   describe command('curl http://localhost:50070/dfshealth.jsp') do
-    its(:stdout) { should match(/Hadoop NameNode&nbsp;0.0.0.0:8020/) }
+    its(:stdout) { should match(/Hadoop NameNode&nbsp;namenode-ubuntu-1204.vagrantup.com:8020/) }
   end
 
   describe command('curl http://localhost:50070/dfsnodelist.jsp?whatNodes=LIVE') do
