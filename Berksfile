@@ -1,5 +1,5 @@
 source 'https://berks.evertrue.com'
-source 'http://api.berkshelf.com'
+source 'https://supermarket.getchef.com'
 
 metadata
 
