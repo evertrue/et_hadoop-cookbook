@@ -42,6 +42,7 @@ suites:
         - '10.140.167.9 namenode-ubuntu-1204.vagrantup.com namenode-ubuntu-1204'
         - '10.231.6.185 datanode-ubuntu-1204.vagrantup.com datanode-ubuntu-1204'
   run_list: [
+    'recipe[storage::ec2test]',
     'recipe[et_hostname]',
     'recipe[apt]',
     'recipe[et_tools]',
@@ -58,6 +59,7 @@ suites:
         - '10.140.167.9 namenode-ubuntu-1204.vagrantup.com namenode-ubuntu-1204'
         - '10.231.6.185 datanode-ubuntu-1204.vagrantup.com datanode-ubuntu-1204'
   run_list: [
+    'recipe[storage::ec2test]',
     'recipe[et_hostname]',
     'recipe[apt]',
     'recipe[et_tools]',
