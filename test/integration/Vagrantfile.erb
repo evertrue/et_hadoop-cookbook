@@ -33,7 +33,7 @@ Vagrant.configure("2") do |c|
            file_to_disk = "./tmp/tmp_disk_#{i}.vdi"
     %>
     p.customize ['createhd', '--filename', '<%= file_to_disk %>', '--size', 32 * 1024]
-    p.customize ['storageattach', :id, '--storagectl', 'SATA Controller', '--port', <%= i + 1 %>, '--device', 0, '--type', 'hdd', '--medium', '<%= file_to_disk %>']
+    p.customize ['storageattach', :id, '--storagectl', 'IDE Controller', '--port', <%= i %>, '--device', 0, '--type', 'hdd', '--medium', '<%= file_to_disk %>']
       <% end
        else 
     %>
