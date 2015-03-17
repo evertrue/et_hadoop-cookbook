@@ -1,3 +1,11 @@
+## 2.3.1
+
+* Bump hadoop 2.1.1
+* Use a wildcard to match the domain name on dfshealth
+* Update Vagrantfile disc controller information
+* Cookbook source: chef.io
+* Include storage cookbook ec2 test in run list
+
 ## 2.3.0
 
 * Add sudoer rule for `deploy` user for deploying Hadoop jobs via Capistrano
